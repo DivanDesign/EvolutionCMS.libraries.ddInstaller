@@ -1,0 +1,51 @@
+{
+	"name": "dd/evolutioncms-libraries-ddinstaller",
+	"type": "modxevo-library",
+	"version": "0.1",
+	"description": "The library for install and update snippets, plugins and libraries.",
+	"keywords": [
+		"modx",
+		"modx evo",
+		"modx evolution",
+		"evo",
+		"evo cms",
+		"evolutioncms",
+		"evolution cms",
+		"dd group",
+		"dd studio",
+		"divandesign",
+		"ddinstaller",
+		"installer",
+		"updater",
+		"install snippet",
+		"install plugin",
+		"install library",
+		"install lib",
+		"update snippet",
+		"update plugin",
+		"update library",
+		"update lib"
+	],
+	"support": {
+		"chat": "https://t.me/dd_code"
+	},
+	"authors": [
+		{
+			"name": "DD Group",
+			"email": "code@DivanDesign.biz",
+			"homepage": "https://code.divandesign.biz",
+			"role": "Owner"
+		},
+		{
+			"name": "Ilyas Ronef",
+			"email": "ilyas@DivanDesign.ru",
+			"homepage": "https://ronef.ru",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.6.0",
+		"dd/evolutioncms-libraries-ddtools": ">=0.48.2",
+		"dd/evolutioncms-snippets-ddmakehttprequest": ">=2.3.0"
+	}
+}
