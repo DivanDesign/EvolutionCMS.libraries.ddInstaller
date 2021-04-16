@@ -1,7 +1,7 @@
 <?php
 /**
  * ddInstaller
- * @version 0.1 (2021-04-12)
+ * @version 0.1.1 (2021-04-16)
  * 
  * @see README.md
  * 
