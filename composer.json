@@ -1,7 +1,7 @@
 {
 	"name": "dd/evolutioncms-libraries-ddinstaller",
 	"type": "modxevo-library",
-	"version": "0.1",
+	"version": "0.1.1",
 	"description": "The library for install and update snippets, plugins and libraries.",
 	"keywords": [
 		"modx",
