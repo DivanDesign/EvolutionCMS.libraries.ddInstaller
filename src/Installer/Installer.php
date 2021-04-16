@@ -100,7 +100,7 @@ abstract class Installer extends \DDTools\BaseClass {
 	
 	/**
 	 * fillDistrDataFromUrl
-	 * @version 1.0 (2021-04-03)
+	 * @version 1.0.1 (2021-04-16)
 	 * 
 	 * @desc Parses GitHub URL and fill resource data fields.
 	 * 
@@ -124,17 +124,14 @@ abstract class Installer extends \DDTools\BaseClass {
 		$this->distrData->owner = $ownerAndRepo[0];
 		$this->distrData->fullName = $ownerAndRepo[1];
 		
-		$this->distrData->shortName =
-			//E. g. `ddTools`
-			array_pop(
-				//E. g. `['EvolutionCMS', 'libraries', 'ddTools']`
-				explode(
-					'.',
-					//E. g. `EvolutionCMS.libraries.ddTools`
-					$this->distrData->fullName
-				)
-			)
-		;
+		//E. g. `['EvolutionCMS', 'libraries', 'ddTools']`
+		$this->distrData->shortName = explode(
+			'.',
+			//E. g. `EvolutionCMS.libraries.ddTools`
+			$this->distrData->fullName
+		);
+		//E. g. `ddTools`
+		$this->distrData->shortName = array_pop($this->distrData->shortName);
 	}
 	
 	/**
