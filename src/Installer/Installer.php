@@ -418,7 +418,7 @@ abstract class Installer extends \DDTools\BaseClass {
 	
 	/**
 	 * installToDb
-	 * @version 1.0 (2021-04-07)
+	 * @version 1.0.1 (2021-04-16)
 	 * 
 	 * @param $params {stdClass|arrayAssociative|stringJsonObject|stringHjsonObject|stringQueryFormatted} — @required
 	 * @param $params->version {string} — @required
@@ -446,12 +446,12 @@ abstract class Installer extends \DDTools\BaseClass {
 			);
 			
 			$fieldsToUpdate = [
-				'description' =>
+				'description' => \ddTools::$modx->db->escape(
 					'<b>' .
 					$params->version .
 					'</b> ' .
 					$params->description
-				,
+				),
 				$this->dbSettings->contentField => \ddTools::$modx->db->escape($params->content)
 			];
 			
