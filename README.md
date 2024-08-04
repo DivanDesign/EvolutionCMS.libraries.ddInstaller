@@ -102,13 +102,13 @@ Installs or updates needed snippet, plugin, or library.
 Just run the following PHP code in your sources or [Console](https://github.com/vanchelo/MODX-Evolution-Ajax-Console):
 
 ```php
-//Include (MODX)EvolutionCMS.libraries.ddInstaller
+// Include (MODX)EvolutionCMS.libraries.ddInstaller
 require_once(
 	$modx->getConfig('base_path') .
 	'assets/libs/ddInstaller/require.php'
 );
 
-//Install (MODX)EvolutionCMS.snippets.ddGetDate
+// Install (MODX)EvolutionCMS.snippets.ddGetDate
 \DDInstaller::install([
 	'url' => 'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate',
 	'type' => 'snippet'

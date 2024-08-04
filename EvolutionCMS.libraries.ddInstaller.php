@@ -8,11 +8,11 @@
  * @copyright 2021 DD Group {@link https://DivanDesign.biz }
  */
 
-//Simple API
+// Simple API
 class DDInstaller {
 	/**
 	 * install
-	 * @version 1.0 (2021-04-08)
+	 * @version 1.0.1 (2024-08-04)
 	 * 
 	 * @param $params {stdClass|arrayAssociative|stringJsonObject|stringHjsonObject|stringQueryFormatted} — @required
 	 * @param $params->url {stringUrl} — Resource GitHub URL (e. g. `https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools`). @required
@@ -21,7 +21,7 @@ class DDInstaller {
 	 * @return {boolean}
 	 */
 	public static function install($params){
-		//Prepare params
+		// Prepare params
 		$params = \DDTools\ObjectTools::convertType([
 			'object' => $params,
 			'type' => 'objectStdClass'
@@ -36,7 +36,7 @@ class DDInstaller {
 				DIRECTORY_SEPARATOR .
 				'Installer'
 			,
-			//Passing parameters into constructor
+			// Passing parameters into constructor
 			'params' => [
 				'url' => $params->url
 			]
