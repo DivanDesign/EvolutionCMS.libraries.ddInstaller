@@ -120,6 +120,7 @@ require_once(
 
 * [Telegram chat](https://t.me/dd_code)
 * [Packagist](https://packagist.org/packages/dd/evolutioncms-snippets-ddinstaller)
+* [GitHub](https://github.com/DivanDesign/EvolutionCMS.libraries.ddInstaller)
 
 
 <link rel="stylesheet" type="text/css" href="https://raw.githack.com/DivanDesign/CSS.ddMarkdown/master/style.min.css" />
