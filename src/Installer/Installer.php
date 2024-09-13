@@ -1,5 +1,5 @@
 <?php
-namespace DDInstaller;
+namespace DDInstaller\Installer;
 
 abstract class Installer extends \DDTools\Base\Base {
 	use \DDTools\Base\AncestorTrait;

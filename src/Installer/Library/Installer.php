@@ -1,7 +1,7 @@
 <?php
-namespace DDInstaller\Library;
+namespace DDInstaller\Installer\Library;
 
-class Installer extends \DDInstaller\Installer {
+class Installer extends \DDInstaller\Installer\Installer {
 	/**
 	 * fillPaths_destination
 	 * @version 1.0.1 (2024-09-13)

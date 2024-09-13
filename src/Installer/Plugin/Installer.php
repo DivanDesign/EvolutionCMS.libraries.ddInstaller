@@ -1,7 +1,7 @@
 <?php
-namespace DDInstaller\Plugin;
+namespace DDInstaller\Installer\Plugin;
 
-class Installer extends \DDInstaller\Installer {
+class Installer extends \DDInstaller\Installer\Installer {
 	protected
 		/**
 		 * @property $dbSettings {stdClass}
