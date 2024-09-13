@@ -1,7 +1,7 @@
 <?php
-namespace DDInstaller\Snippet;
+namespace DDInstaller\Installer\Snippet;
 
-class Installer extends \DDInstaller\Installer {
+class Installer extends \DDInstaller\Installer\Installer {
 	protected
 		/**
 		 * @property $dbSettings {stdClass}
@@ -10,7 +10,7 @@ class Installer extends \DDInstaller\Installer {
 		 */
 		$dbSettings = [
 			'tableName' => 'site_snippets',
-			'contentField' => 'snippet'
+			'contentField' => 'snippet',
 		]
 	;
 }

@@ -36,16 +36,13 @@
 
 ## Использует
 
-* PHP >= 5.6
+* PHP >= 7.4
 * [(MODX)EvolutionCMS](https://github.com/evolution-cms/evolution) >= 1.1
-* [(MODX)EvolutionCMS.libraries.ddTools](https://code.divandesign.ru/modx/ddtools) >= 0.48.2
+* [(MODX)EvolutionCMS.libraries.ddTools](https://code.divandesign.ru/modx/ddtools) >= 0.62
 * [(MODX)EvolutionCMS.snippets.ddMakeHttpRequest](https://code.divandesign.ru/modx/ddmakehttprequest) >= 2.3
 
 
-## Документация
-
-
-### Установка
+## Установка
 
 Элементы → Управление файлами:
 
@@ -53,10 +50,10 @@
 2. Извлеките содержимое архива в неё.
 
 
-### Описание параметров
+## Описание параметров
 
 
-#### `\DDInstaller::install($params)`
+### `\DDInstaller::install($params)`
 
 Устанавливает или обновляет необходимый сниппет, плагин или библиотеку.
 
@@ -67,25 +64,31 @@
 		* `object`
 		* `stringJsonObject` — в виде [JSON](https://ru.wikipedia.org/wiki/JSON)
 		* `stringHjsonObject` — в виде [HJSON](https://hjson.github.io/)
-		* `stringQueryFormated` — в виде [Query string](https://en.wikipedia.org/wiki/Query_string)
+		* `stringQueryFormatted` — в виде [Query string](https://en.wikipedia.org/wiki/Query_string)
 	* **Обязателен**
 	
 * `$params->url`
-	* Описание: URL ресурса на GitHub.  
-		Например, `'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate'`
+	* Описание: URL ресурса на GitHub.
+		* Например, `'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate'`
 	* Допустимые значения: `stringUrl`
 	* **Обязателен**
 	
 * `$params->type`
 	* Описание: Тип ресурса.
+		* Параметр не чувствителен к регистру.
+		* Если `$params->url` содержит следующие слова, параметр можно опустить и метод определит его автоматически:
+			* `'snippet'`, `'snippets'` — `'snippet'`
+			* `'plugin'`, `'plugins'` — `'plugin'`
+			* `'library'`, `'libraries'` — `'library'`
 	* Допустимые значения:
-		* `snippet`
-		* `plugin`
-		* `library`
-	* **Обязателен**
+		* `'snippet'`
+		* `'plugin'`
+		* `'library'`
+		* любое пустое значение — будет автоматически определён из `$params->url`
+	* Значение по умолчанию: —
 
 
-##### Возвращает
+#### Возвращает
 
 * `$result`
 	* Описание: Статус установки.
@@ -94,24 +97,23 @@
 		* `false` — если что-то пошло не так или версия ресурса на Сайте уже актуальна
 
 
-### Примеры
+## Примеры
 
 
-#### Установить или обновить сниппет `ddGetDate`
+### Установить или обновить сниппет `ddGetDate`
 
 Просто вызовите следующий код в своих исходинках или модуле [Console](https://github.com/vanchelo/MODX-Evolution-Ajax-Console):
 
 ```php
-//Подключение (MODX)EvolutionCMS.libraries.ddInstaller
+// Подключение (MODX)EvolutionCMS.libraries.ddInstaller
 require_once(
-	$modx->getConfig('base_path') .
-	'assets/libs/ddInstaller/require.php'
+	$modx->getConfig('base_path')
+	. 'assets/libs/ddInstaller/require.php'
 );
 
-//Установка (MODX)EvolutionCMS.snippets.ddGetDate
+// Установка (MODX)EvolutionCMS.snippets.ddGetDate
 \DDInstaller::install([
 	'url' => 'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate',
-	'type' => 'snippet'
 ]);
 ```
 
@@ -123,6 +125,7 @@ require_once(
 
 * [Telegram chat](https://t.me/dd_code)
 * [Packagist](https://packagist.org/packages/dd/evolutioncms-snippets-ddinstaller)
+* [GitHub](https://github.com/DivanDesign/EvolutionCMS.libraries.ddInstaller)
 
 
-<link rel="stylesheet" type="text/css" href="https://DivanDesign.ru/assets/files/ddMarkdown.css" />
+<link rel="stylesheet" type="text/css" href="https://raw.githack.com/DivanDesign/CSS.ddMarkdown/master/style.min.css" />

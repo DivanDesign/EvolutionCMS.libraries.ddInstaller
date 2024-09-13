@@ -36,16 +36,13 @@ The library for installing and updating snippets, plugins, and libraries from Gi
 
 ## Requires
 
-* PHP >= 5.6
+* PHP >= 7.4
 * [(MODX)EvolutionCMS](https://github.com/evolution-cms/evolution) >= 1.1
-* [(MODX)EvolutionCMS.libraries.ddTools](https://code.divandesign.biz/modx/ddtools) >= 0.48.2
-* [(MODX)EvolutionCMS.snippets.ddMakeHttpRequest](https://code.divandesign.biz/modx/ddmakehttprequest) >= 2.3
+* [(MODX)EvolutionCMS.libraries.ddTools](https://code.divandesign.ru/modx/ddtools) >= 0.62
+* [(MODX)EvolutionCMS.snippets.ddMakeHttpRequest](https://code.divandesign.ru/modx/ddmakehttprequest) >= 2.3
 
 
-## Documentation
-
-
-### Installation
+## Installation
 
 Elements → Manage Files:
 
@@ -53,65 +50,70 @@ Elements → Manage Files:
 2. Extract the archive to the folder.
 
 
-### Parameters description
+## Parameters description
 
 
-#### `\DDInstaller::install($params)`
+### `\DDInstaller::install($params)`
 
 Installs or updates needed snippet, plugin, or library.
 
 * `$params`
-	* Desctription: Parameters, the pass-by-name style is used.
+	* Description: Parameters, the pass-by-name style is used.
 	* Valid values:
 		* `arrayAssociative`
 		* `object`
 		* `stringJsonObject` — as [JSON](https://en.wikipedia.org/wiki/JSON)
 		* `stringHjsonObject` — as [HJSON](https://hjson.github.io/)
-		* `stringQueryFormated` — as [Query string](https://en.wikipedia.org/wiki/Query_string)
+		* `stringQueryFormatted` — as [Query string](https://en.wikipedia.org/wiki/Query_string)
 	* **Required**
 	
 * `$params->url`
-	* Desctription: Resource GitHub URL.  
-		E. g. `'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate'`
+	* Description: Resource GitHub URL.
+		* E. g. `'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate'`
 	* Valid values: `stringUrl`
 	* **Required**
 	
 * `$params->type`
-	* Desctription: Resource type.
+	* Description: Resource type.
+		* The parameter is case insensitive.
+		* If `$params->url` contain the following words, you can avoid this parameter and the method will detect type automatically:
+			* `'snippet'`, `'snippets'` — `'snippet'`
+			* `'plugin'`, `'plugins'` — `'plugin'`
+			* `'library'`, `'libraries'` — `'library'`
 	* Valid values:
-		* `snippet`
-		* `plugin`
-		* `library`
-	* **Required**
+		* `'snippet'`
+		* `'plugin'`
+		* `'library'`
+		* any empty value — will be auto detected from `$params->url`
+	* Default value: —
 
 
-##### Returns
+#### Returns
 
 * `$result`
-	* Desctription: Installation status.
+	* Description: Installation status.
 	* Valid values:
 		* `true` — if the resource is installed or updated successfully
 		* `false` — if something went wrong or the resource on Site is already up to date
 
 
-### Examples
+## Examples
 
 
-#### Install or update the `ddGetDate` snippet
+### Install or update the `ddGetDate` snippet
 
 Just run the following PHP code in your sources or [Console](https://github.com/vanchelo/MODX-Evolution-Ajax-Console):
 
 ```php
-//Include (MODX)EvolutionCMS.libraries.ddInstaller
+// Include (MODX)EvolutionCMS.libraries.ddInstaller
 require_once(
-	$modx->getConfig('base_path') .
-	'assets/libs/ddInstaller/require.php'
+	$modx->getConfig('base_path')
+	. 'assets/libs/ddInstaller/require.php'
 );
 
-//Install (MODX)EvolutionCMS.snippets.ddGetDate
+// Install (MODX)EvolutionCMS.snippets.ddGetDate
 \DDInstaller::install([
 	'url' => 'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate',
-	'type' => 'snippet'
 ]);
 ```
 
@@ -123,6 +125,7 @@ require_once(
 
 * [Telegram chat](https://t.me/dd_code)
 * [Packagist](https://packagist.org/packages/dd/evolutioncms-snippets-ddinstaller)
+* [GitHub](https://github.com/DivanDesign/EvolutionCMS.libraries.ddInstaller)
 
 
-<link rel="stylesheet" type="text/css" href="https://DivanDesign.ru/assets/files/ddMarkdown.css" />
+<link rel="stylesheet" type="text/css" href="https://raw.githack.com/DivanDesign/CSS.ddMarkdown/master/style.min.css" />
