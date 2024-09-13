@@ -75,10 +75,11 @@ Installs or updates needed snippet, plugin, or library.
 	
 * `$params->type`
 	* Description: Resource type.
+		* The parameter is case insensitive.
 	* Valid values:
-		* `snippet`
-		* `plugin`
-		* `library`
+		* `'snippet'`
+		* `'plugin'`
+		* `'library'`
 	* **Required**
 
 
