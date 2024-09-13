@@ -10,7 +10,7 @@ class Installer extends \DDInstaller\Installer {
 		 */
 		$dbSettings = [
 			'tableName' => 'site_plugins',
-			'contentField' => 'plugincode'
+			'contentField' => 'plugincode',
 		]
 	;
 }

@@ -14,7 +14,7 @@ abstract class Installer extends \DDTools\BaseClass {
 			'fullName' => '',
 			'shortName' => '',
 			'type' => '',
-			'owner' => ''
+			'owner' => '',
 		],
 		
 		/**
@@ -28,7 +28,7 @@ abstract class Installer extends \DDTools\BaseClass {
 			'assetsDir' => '',
 			'destinationDir' => '',
 			'cacheDir' => '',
-			'cacheFile' => ''
+			'cacheFile' => '',
 		],
 		
 		/**
@@ -38,13 +38,13 @@ abstract class Installer extends \DDTools\BaseClass {
 		 */
 		 $dbSettings = [
 			'tableName' => null,
-			'contentField' => null
+			'contentField' => null,
 		]
 	;
 	
 	/**
 	 * __construct
-	 * @version 1.0.1 (2024-08-04)
+	 * @version 1.0.2 (2024-09-13)
 	 * 
 	 * @param $params {stdClass|arrayAssociative|stringJsonObject|stringHjsonObject|stringQueryFormatted} — @required
 	 * @param $params->url {stringUrl} — Resource GitHub URL (e. g. `https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools`). @required
@@ -53,7 +53,7 @@ abstract class Installer extends \DDTools\BaseClass {
 		// Prepare params
 		$params = \DDTools\ObjectTools::convertType([
 			'object' => $params,
-			'type' => 'objectStdClass'
+			'type' => 'objectStdClass',
 		]);
 		
 		// Prepare field types
@@ -94,13 +94,13 @@ abstract class Installer extends \DDTools\BaseClass {
 		
 		// Create cache dir if needed
 		\DDTools\FilesTools::createDir([
-			'path' => $this->paths->cacheDir
+			'path' => $this->paths->cacheDir,
 		]);
 	}
 	
 	/**
 	 * fillDistrDataFromUrl
-	 * @version 1.0.2 (2024-08-04)
+	 * @version 1.0.3 (2024-09-13)
 	 * 
 	 * @desc Parses GitHub URL and fill resource data fields.
 	 * 
@@ -136,7 +136,7 @@ abstract class Installer extends \DDTools\BaseClass {
 	
 	/**
 	 * fillPaths
-	 * @version 1.0.1 (2024-08-04)
+	 * @version 1.0.2 (2024-09-13)
 	 * 
 	 * @return {void}
 	 */
@@ -146,8 +146,8 @@ abstract class Installer extends \DDTools\BaseClass {
 			dirname(
 				__DIR__,
 				4
-			) .
-			DIRECTORY_SEPARATOR
+			)
+			. DIRECTORY_SEPARATOR
 		;
 		
 		// Destination path
@@ -155,43 +155,43 @@ abstract class Installer extends \DDTools\BaseClass {
 		
 		// Cache dir
 		$this->paths->cacheDir =
-			$this->paths->assetsDir .
-			'cache' .
-			DIRECTORY_SEPARATOR .
-			'ddInstaller' .
-			DIRECTORY_SEPARATOR
+			$this->paths->assetsDir
+			. 'cache'
+			. DIRECTORY_SEPARATOR
+			. 'ddInstaller'
+			. DIRECTORY_SEPARATOR
 		;
 		
 		// Cache file
 		$this->paths->cacheFile =
-			$this->paths->cacheDir .
-			$this->distrData->fullName .
-			'.zip'
+			$this->paths->cacheDir
+			. $this->distrData->fullName
+			. '.zip'
 		;
 	}
 	
 	/**
 	 * fillPaths_destination
-	 * @version 1.0 (2021-04-03)
+	 * @version 1.0.1 (2024-09-13)
 	 * 
 	 * @return {void}
 	 */
 	protected function fillPaths_destination(){
 		$this->paths->destinationDir =
-			$this->paths->assetsDir .
-			(
-				$this->distrData->type .
-				's'
-			) .
-			DIRECTORY_SEPARATOR .
-			$this->distrData->shortName .
-			DIRECTORY_SEPARATOR
+			$this->paths->assetsDir
+			. (
+				$this->distrData->type
+				. 's'
+			)
+			. DIRECTORY_SEPARATOR
+			. $this->distrData->shortName
+			. DIRECTORY_SEPARATOR
 		;
 	}
 	
 	/**
 	 * install
-	 * @version 1.0.1 (2024-08-04)
+	 * @version 1.0.2 (2024-09-13)
 	 * 
 	 * @return {boolean} — Is resource installed?
 	 */
@@ -205,17 +205,17 @@ abstract class Installer extends \DDTools\BaseClass {
 			$distrRootDir = $distrZipObject->getNameIndex(0);
 			
 			$distrComposerJson = $distrZipObject->getFromName(
-				$distrRootDir .
-				'composer.json'
+				$distrRootDir
+				. 'composer.json'
 			);
 			
 			if (
-				is_string($distrComposerJson) &&
-				!empty($distrComposerJson)
+				is_string($distrComposerJson)
+				&& !empty($distrComposerJson)
 			){
 				$distrComposerJson = \DDTools\ObjectTools::convertType([
 					'object' => $distrComposerJson,
-					'type' => 'objectStdClass'
+					'type' => 'objectStdClass',
 				]);
 			}
 			
@@ -224,7 +224,7 @@ abstract class Installer extends \DDTools\BaseClass {
 				\DDTools\FilesTools::removeDir($this->paths->destinationDir);
 				// And create again
 				\DDTools\FilesTools::createDir([
-					'path' => $this->paths->destinationDir
+					'path' => $this->paths->destinationDir,
 				]);
 				
 				// Iterate over all files in the archive
@@ -254,25 +254,26 @@ abstract class Installer extends \DDTools\BaseClass {
 						substr(
 							$filePathname,
 							-1
-						) ==
-						'/'
+						)
+						== '/'
 					){
 						// Create
 						\DDTools\FilesTools::createDir([
 							'path' =>
-								$this->paths->destinationDir .
-								$filePathname
+								$this->paths->destinationDir
+								. $filePathname
+							,
 						]);
 					}else{
 						// If the file must be installed to DB
 						if (
-							$filePathname ==
+							$filePathname
 							// E. g. `ddMakeHttpRequest_snippet.php`
-							(
-								$this->distrData->shortName .
-								'_' .
-								$this->distrData->type .
-								'.php'
+							== (
+								$this->distrData->shortName
+								. '_'
+								. $this->distrData->type
+								. '.php'
 							)
 						){
 							$this->installToDb([
@@ -280,12 +281,12 @@ abstract class Installer extends \DDTools\BaseClass {
 								'description' =>
 									\DDTools\ObjectTools::isPropExists([
 										'object' => $distrComposerJson,
-										'propName' => 'description'
-									]) ?
-									$distrComposerJson->description :
-									''
+										'propName' => 'description',
+									])
+									? $distrComposerJson->description
+									: ''
 								,
-								'content' => $distrZipObject->getFromIndex($fileIndex)
+								'content' => $distrZipObject->getFromIndex($fileIndex),
 							]);
 						}else{
 							file_put_contents(
@@ -312,7 +313,7 @@ abstract class Installer extends \DDTools\BaseClass {
 	
 	/**
 	 * downloadDistrZip
-	 * @version 1.0.1 (2024-08-04)
+	 * @version 1.0.2 (2024-09-13)
 	 * 
 	 * @return {boolean}
 	 */
@@ -323,17 +324,17 @@ abstract class Installer extends \DDTools\BaseClass {
 			'name' => 'ddMakeHttpRequest',
 			'params' => [
 				'url' =>
-					'https://api.github.com/repos/' .
-					$this->distrData->owner .
-					'/' .
-					$this->distrData->fullName .
-					'/zipball/'
+					'https://api.github.com/repos/'
+					. $this->distrData->owner
+					. '/'
+					. $this->distrData->fullName
+					. '/zipball/'
 				,
 				'userAgent' => \ddTools::$modx->getConfig('site_url'),
 				'headers' => [
-					'Accept: application/vnd.github.v3+json'
-				]
-			]
+					'Accept: application/vnd.github.v3+json',
+				],
+			],
 		]);
 		
 		// Clear all or we will get error
@@ -341,9 +342,9 @@ abstract class Installer extends \DDTools\BaseClass {
 		
 		// If we have dump
 		if(
-			is_string($fileContent) &&
+			is_string($fileContent)
 			// If non-JSON is gotten
-			$fileContent[0] != '{'
+			&& $fileContent[0] != '{'
 		){
 			// Save cache file
 			file_put_contents(
@@ -359,7 +360,7 @@ abstract class Installer extends \DDTools\BaseClass {
 	
 	/**
 	 * isInstallNeeded
-	 * @version 1.0.1 (2024-08-04)
+	 * @version 1.0.2 (2024-09-13)
 	 * 
 	 * @param $distrComposerJson {stdClass}
 	 * 
@@ -371,34 +372,34 @@ abstract class Installer extends \DDTools\BaseClass {
 		
 		if (
 			// We don't do anything if the repository has no `composer.json`
-			is_object($distrComposerJson) &&
+			is_object($distrComposerJson)
 			// Version is required
-			!empty($distrComposerJson->version)
+			&& !empty($distrComposerJson->version)
 		){
 			$existComposerJson =
-				$this->paths->destinationDir .
-				'composer.json'
+				$this->paths->destinationDir
+				. 'composer.json'
 			;
 			
 			if (
 				// If destination composer is absent
-				!is_file($existComposerJson) ||
+				!is_file($existComposerJson)
 				// Or invalid
-				empty($existComposerJson = file_get_contents($existComposerJson))
+				|| empty($existComposerJson = file_get_contents($existComposerJson))
 			){
 				// Just install
 				$result = true;
 			}else{
 				$existComposerJson = \DDTools\ObjectTools::convertType([
 					'object' => $existComposerJson,
-					'type' => 'objectStdClass'
+					'type' => 'objectStdClass',
 				]);
 				
 				if (
 					// If destination version is absent
-					empty($existComposerJson->version) ||
+					empty($existComposerJson->version)
 					// Or distr version > destination version
-					version_compare(
+					|| version_compare(
 						$distrComposerJson->version,
 						$existComposerJson->version,
 						'>'
@@ -415,7 +416,7 @@ abstract class Installer extends \DDTools\BaseClass {
 	
 	/**
 	 * installToDb
-	 * @version 1.0.2 (2024-08-04)
+	 * @version 1.0.3 (2024-09-13)
 	 * 
 	 * @param $params {stdClass|arrayAssociative|stringJsonObject|stringHjsonObject|stringQueryFormatted} — @required
 	 * @param $params->version {string} — @required
@@ -428,7 +429,7 @@ abstract class Installer extends \DDTools\BaseClass {
 		// Prepare params
 		$params = \DDTools\ObjectTools::convertType([
 			'object' => $params,
-			'type' => 'objectStdClass'
+			'type' => 'objectStdClass',
 		]);
 		
 		if (!empty($this->dbSettings->tableName)){
@@ -444,12 +445,12 @@ abstract class Installer extends \DDTools\BaseClass {
 			
 			$fieldsToUpdate = [
 				'description' => \ddTools::$modx->db->escape(
-					'<b>' .
-					$params->version .
-					'</b> ' .
-					$params->description
+					'<b>'
+					. $params->version
+					. '</b> '
+					. $params->description
 				),
-				$this->dbSettings->contentField => \ddTools::$modx->db->escape($params->content)
+				$this->dbSettings->contentField => \ddTools::$modx->db->escape($params->content),
 			];
 			
 			$destinationId = \ddTools::$modx->db->getValue(\ddTools::$modx->db->select(
@@ -459,9 +460,9 @@ abstract class Installer extends \DDTools\BaseClass {
 				$this->dbSettings->tableName,
 				// Where
 				(
-					'`name` = "' .
-					\ddTools::$modx->db->escape($this->distrData->shortName) .
-					'"'
+					'`name` = "'
+						. \ddTools::$modx->db->escape($this->distrData->shortName)
+					. '"'
 				)
 			));
 			
@@ -475,10 +476,7 @@ abstract class Installer extends \DDTools\BaseClass {
 					// From
 					$this->dbSettings->tableName,
 					// Where
-					(
-						'`id` = ' .
-						$destinationId
-					)
+					'`id` = ' . $destinationId
 				);
 			}else{
 				$fieldsToUpdate['createdon'] = time();

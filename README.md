@@ -104,14 +104,14 @@ Just run the following PHP code in your sources or [Console](https://github.com/
 ```php
 // Include (MODX)EvolutionCMS.libraries.ddInstaller
 require_once(
-	$modx->getConfig('base_path') .
-	'assets/libs/ddInstaller/require.php'
+	$modx->getConfig('base_path')
+	. 'assets/libs/ddInstaller/require.php'
 );
 
 // Install (MODX)EvolutionCMS.snippets.ddGetDate
 \DDInstaller::install([
 	'url' => 'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate',
-	'type' => 'snippet'
+	'type' => 'snippet',
 ]);
 ```
 

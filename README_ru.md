@@ -104,14 +104,14 @@
 ```php
 // Подключение (MODX)EvolutionCMS.libraries.ddInstaller
 require_once(
-	$modx->getConfig('base_path') .
-	'assets/libs/ddInstaller/require.php'
+	$modx->getConfig('base_path')
+	. 'assets/libs/ddInstaller/require.php'
 );
 
 // Установка (MODX)EvolutionCMS.snippets.ddGetDate
 \DDInstaller::install([
 	'url' => 'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate',
-	'type' => 'snippet'
+	'type' => 'snippet',
 ]);
 ```
 

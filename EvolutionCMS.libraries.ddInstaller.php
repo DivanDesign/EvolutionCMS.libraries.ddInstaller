@@ -12,7 +12,7 @@
 class DDInstaller {
 	/**
 	 * install
-	 * @version 1.0.1 (2024-08-04)
+	 * @version 1.0.2 (2024-09-13)
 	 * 
 	 * @param $params {stdClass|arrayAssociative|stringJsonObject|stringHjsonObject|stringQueryFormatted} — @required
 	 * @param $params->url {stringUrl} — Resource GitHub URL (e. g. `https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools`). @required
@@ -24,22 +24,22 @@ class DDInstaller {
 		// Prepare params
 		$params = \DDTools\ObjectTools::convertType([
 			'object' => $params,
-			'type' => 'objectStdClass'
+			'type' => 'objectStdClass',
 		]);
 		
 		$installerObject = \DDInstaller\Installer::createChildInstance([
 			'name' => $params->type,
 			'parentDir' =>
-				__DIR__ .
-				DIRECTORY_SEPARATOR .
-				'src' .
-				DIRECTORY_SEPARATOR .
-				'Installer'
+				__DIR__
+				. DIRECTORY_SEPARATOR
+				. 'src'
+				. DIRECTORY_SEPARATOR
+				. 'Installer'
 			,
 			// Passing parameters into constructor
 			'params' => [
-				'url' => $params->url
-			]
+				'url' => $params->url,
+			],
 		]);
 		
 		return $installerObject->install();
