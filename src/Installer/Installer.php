@@ -46,7 +46,7 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * __construct
-	 * @version 1.0.2 (2024-09-13)
+	 * @version 1.0.3 (2024-09-13)
 	 * 
 	 * @param $params {stdClass|arrayAssociative|stringJsonObject|stringHjsonObject|stringQueryFormatted} — @required
 	 * @param $params->url {stringUrl} — Resource GitHub URL (e. g. `https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools`). @required
@@ -75,19 +75,8 @@ abstract class Installer extends \DDTools\Base\Base {
 		$this->distrData->type =
 			// E. g. `snippet`
 			strtolower(
-				// E. g. [`Snippet`]
-				array_slice(
-					// E. g. `['DDInstaller', 'Snippet', 'Installer']`
-					explode(
-						'\\',
-						// E. g. `DDInstaller\\Snippet\\Installer`
-						get_called_class()
-					),
-					-2,
-					1
-				)
 				// E. g. `Snippet`
-				[0]
+				static::getClassName()->namespaceShort
 			)
 		;
 		

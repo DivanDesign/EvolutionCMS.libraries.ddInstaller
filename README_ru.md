@@ -36,9 +36,9 @@
 
 ## Использует
 
-* PHP >= 5.6
+* PHP >= 7.4
 * [(MODX)EvolutionCMS](https://github.com/evolution-cms/evolution) >= 1.1
-* [(MODX)EvolutionCMS.libraries.ddTools](https://code.divandesign.ru/modx/ddtools) >= 0.56
+* [(MODX)EvolutionCMS.libraries.ddTools](https://code.divandesign.ru/modx/ddtools) >= 0.62
 * [(MODX)EvolutionCMS.snippets.ddMakeHttpRequest](https://code.divandesign.ru/modx/ddmakehttprequest) >= 2.3
 
 

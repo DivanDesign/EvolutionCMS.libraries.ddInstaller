@@ -37,8 +37,8 @@
 		}
 	],
 	"require": {
-		"php": ">=5.6.0",
-		"dd/evolutioncms-libraries-ddtools": ">=0.56.0",
+		"php": ">=7.4.0",
+		"dd/evolutioncms-libraries-ddtools": ">=0.62.0",
 		"dd/evolutioncms-snippets-ddmakehttprequest": ">=2.3.0"
 	},
 	"autoload": {
