@@ -68,8 +68,8 @@
 	* **Обязателен**
 	
 * `$params->url`
-	* Описание: URL ресурса на GitHub.  
-		Например, `'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate'`
+	* Описание: URL ресурса на GitHub.
+		* Например, `'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate'`
 	* Допустимые значения: `stringUrl`
 	* **Обязателен**
 	

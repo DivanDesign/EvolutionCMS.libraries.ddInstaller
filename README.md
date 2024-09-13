@@ -68,8 +68,8 @@ Installs or updates needed snippet, plugin, or library.
 	* **Required**
 	
 * `$params->url`
-	* Description: Resource GitHub URL.  
-		E. g. `'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate'`
+	* Description: Resource GitHub URL.
+		* E. g. `'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate'`
 	* Valid values: `stringUrl`
 	* **Required**
 	
