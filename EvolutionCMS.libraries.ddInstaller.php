@@ -12,11 +12,11 @@
 class DDInstaller {
 	/**
 	 * install
-	 * @version 1.0.4 (2024-09-13)
+	 * @version 1.1 (2024-09-13)
 	 * 
 	 * @param $params {stdClass|arrayAssociative|stringJsonObject|stringHjsonObject|stringQueryFormatted} — @required
 	 * @param $params->url {stringUrl} — Resource GitHub URL (e. g. `https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools`). @required
-	 * @param $params->type {'Snippet'|'Plugin'|'Library'} — Resource type. @required
+	 * @param [$params->type] {'Snippet'|'Plugin'|'Library'} — Resource type.
 	 * 
 	 * @return {boolean}
 	 */
@@ -26,6 +26,25 @@ class DDInstaller {
 			'object' => $params,
 			'type' => 'objectStdClass',
 		]);
+		
+		if (empty($params->type)){
+			$urlLowerCase = strtolower($params->url);
+			
+			// TODO: Replace `strpos` to `str_contains` (PHP >= 8.0 is required)
+			// E. g. 'EvolutionCMS.snippets.ddGetChunk'
+			if (strpos($urlLowerCase, 'snippet') !== false){
+				$params->type = 'snippet';
+			// E. g. 'EvolutionCMS.plugins.ddSendRedirect'
+			}elseif (strpos($urlLowerCase, 'plugin') !== false){
+				$params->type = 'plugin';
+			}elseif (
+				// E. g. 'EvolutionCMS.libraries.ddTools', 'EvolutionCMS.library.ddTools'
+				strpos($urlLowerCase, 'libraries') !== false
+				|| strpos($urlLowerCase, 'library') !== false
+			){
+				$params->type = 'library';
+			}
+		}
 		
 		$installerObject = \DDInstaller\Installer\Installer::createChildInstance([
 			'name' => $params->type,

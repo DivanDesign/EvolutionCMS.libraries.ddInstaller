@@ -76,11 +76,16 @@
 * `$params->type`
 	* Описание: Тип ресурса.
 		* Параметр не чувствителен к регистру.
+		* Если `$params->url` содержит следующие слова, параметр можно опустить и метод определит его автоматически:
+			* `'snippet'`, `'snippets'` — `'snippet'`
+			* `'plugin'`, `'plugins'` — `'plugin'`
+			* `'library'`, `'libraries'` — `'library'`
 	* Допустимые значения:
 		* `'snippet'`
 		* `'plugin'`
 		* `'library'`
-	* **Обязателен**
+		* любое пустое значение — будет автоматически определён из `$params->url`
+	* Значение по умолчанию: —
 
 
 #### Возвращает
@@ -109,7 +114,6 @@ require_once(
 // Установка (MODX)EvolutionCMS.snippets.ddGetDate
 \DDInstaller::install([
 	'url' => 'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate',
-	'type' => 'snippet',
 ]);
 ```
 

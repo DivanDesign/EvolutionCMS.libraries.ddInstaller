@@ -76,11 +76,16 @@ Installs or updates needed snippet, plugin, or library.
 * `$params->type`
 	* Description: Resource type.
 		* The parameter is case insensitive.
+		* If `$params->url` contain the following words, you can avoid this parameter and the method will detect type automatically:
+			* `'snippet'`, `'snippets'` — `'snippet'`
+			* `'plugin'`, `'plugins'` — `'plugin'`
+			* `'library'`, `'libraries'` — `'library'`
 	* Valid values:
 		* `'snippet'`
 		* `'plugin'`
 		* `'library'`
-	* **Required**
+		* any empty value — will be auto detected from `$params->url`
+	* Default value: —
 
 
 #### Returns
@@ -109,7 +114,6 @@ require_once(
 // Install (MODX)EvolutionCMS.snippets.ddGetDate
 \DDInstaller::install([
 	'url' => 'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate',
-	'type' => 'snippet',
 ]);
 ```
 
