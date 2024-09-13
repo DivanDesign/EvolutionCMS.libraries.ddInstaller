@@ -1,7 +1,9 @@
 <?php
 namespace DDInstaller;
 
-abstract class Installer extends \DDTools\BaseClass {
+abstract class Installer extends \DDTools\Base\Base {
+	use \DDTools\Base\AncestorTrait;
+	
 	protected
 		/**
 		 * @property $distrData {stdClass}

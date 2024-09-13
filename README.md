@@ -38,7 +38,7 @@ The library for installing and updating snippets, plugins, and libraries from Gi
 
 * PHP >= 5.6
 * [(MODX)EvolutionCMS](https://github.com/evolution-cms/evolution) >= 1.1
-* [(MODX)EvolutionCMS.libraries.ddTools](https://code.divandesign.ru/modx/ddtools) >= 0.48.2
+* [(MODX)EvolutionCMS.libraries.ddTools](https://code.divandesign.ru/modx/ddtools) >= 0.56
 * [(MODX)EvolutionCMS.snippets.ddMakeHttpRequest](https://code.divandesign.ru/modx/ddmakehttprequest) >= 2.3
 
 
