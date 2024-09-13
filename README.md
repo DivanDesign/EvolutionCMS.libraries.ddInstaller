@@ -42,10 +42,7 @@ The library for installing and updating snippets, plugins, and libraries from Gi
 * [(MODX)EvolutionCMS.snippets.ddMakeHttpRequest](https://code.divandesign.biz/modx/ddmakehttprequest) >= 2.3
 
 
-## Documentation
-
-
-### Installation
+## Installation
 
 Elements → Manage Files:
 
@@ -53,10 +50,10 @@ Elements → Manage Files:
 2. Extract the archive to the folder.
 
 
-### Parameters description
+## Parameters description
 
 
-#### `\DDInstaller::install($params)`
+### `\DDInstaller::install($params)`
 
 Installs or updates needed snippet, plugin, or library.
 
@@ -85,7 +82,7 @@ Installs or updates needed snippet, plugin, or library.
 	* **Required**
 
 
-##### Returns
+#### Returns
 
 * `$result`
 	* Desctription: Installation status.
@@ -94,10 +91,10 @@ Installs or updates needed snippet, plugin, or library.
 		* `false` — if something went wrong or the resource on Site is already up to date
 
 
-### Examples
+## Examples
 
 
-#### Install or update the `ddGetDate` snippet
+### Install or update the `ddGetDate` snippet
 
 Just run the following PHP code in your sources or [Console](https://github.com/vanchelo/MODX-Evolution-Ajax-Console):
 
