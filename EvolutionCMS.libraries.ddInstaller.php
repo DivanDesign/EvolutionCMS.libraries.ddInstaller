@@ -1,11 +1,11 @@
 <?php
 /**
  * ddInstaller
- * @version 0.1.1 (2021-04-16)
+ * @version 0.2 (2024-09-13)
  * 
  * @see README.md
  * 
- * @copyright 2021 Ronef {@link https://Ronef.me }
+ * @copyright 2021–2024 Ronef {@link https://Ronef.me }
  */
 
 // Simple API
