@@ -58,23 +58,23 @@ Elements → Manage Files:
 Installs or updates needed snippet, plugin, or library.
 
 * `$params`
-	* Desctription: Parameters, the pass-by-name style is used.
+	* Description: Parameters, the pass-by-name style is used.
 	* Valid values:
 		* `arrayAssociative`
 		* `object`
 		* `stringJsonObject` — as [JSON](https://en.wikipedia.org/wiki/JSON)
 		* `stringHjsonObject` — as [HJSON](https://hjson.github.io/)
-		* `stringQueryFormated` — as [Query string](https://en.wikipedia.org/wiki/Query_string)
+		* `stringQueryFormatted` — as [Query string](https://en.wikipedia.org/wiki/Query_string)
 	* **Required**
 	
 * `$params->url`
-	* Desctription: Resource GitHub URL.  
+	* Description: Resource GitHub URL.  
 		E. g. `'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate'`
 	* Valid values: `stringUrl`
 	* **Required**
 	
 * `$params->type`
-	* Desctription: Resource type.
+	* Description: Resource type.
 	* Valid values:
 		* `snippet`
 		* `plugin`
@@ -85,7 +85,7 @@ Installs or updates needed snippet, plugin, or library.
 #### Returns
 
 * `$result`
-	* Desctription: Installation status.
+	* Description: Installation status.
 	* Valid values:
 		* `true` — if the resource is installed or updated successfully
 		* `false` — if something went wrong or the resource on Site is already up to date
