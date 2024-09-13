@@ -5,7 +5,7 @@
  * 
  * @see README.md
  * 
- * @copyright 2021 DD Group {@link https://DivanDesign.biz }
+ * @copyright 2021 Ronef {@link https://Ronef.me }
  */
 
 // Simple API
