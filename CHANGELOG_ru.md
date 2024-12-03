@@ -1,6 +1,11 @@
 # (MODX)EvolutionCMS.libraries.ddInstaller changelog
 
 
+## Версия 0.3 (2024-12-04)
+
+* \+ `\DDInstaller::install($params)` → Параметры → `$params->revision`: Новый необязательный параметр. Позволяет задать имя ветки, тега или хэш кэммита для получения.
+
+
 ## Версия 0.2 (2024-09-13)
 
 * \+ `\DDInstaller::install($params)` → Параметры → `$params->type`: Параметр стал необязательным. Метод определит тип автоматически из `$params->url` (см. README).

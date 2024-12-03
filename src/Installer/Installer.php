@@ -4,45 +4,43 @@ namespace DDInstaller\Installer;
 abstract class Installer extends \DDTools\Base\Base {
 	use \DDTools\Base\AncestorTrait;
 	
-	protected
-		/**
-		 * @property $distrData {stdClass}
-		 * @property $distrData->fullName {string} — Resource full name (e. g. `EvolutionCMS.libraries.ddTools`).
-		 * @property $distrData->shortName {string} — Resource short name (e. g. `ddTools`).
-		 * @property $distrData->type {'library'|'snippet'|'plugin'} — Resource type.
-		 * @property $distrData->owner {string} — Resource GitHub owner (e. g. `DivanDesign`).
-		 */
-		$distrData = [
-			'fullName' => '',
-			'shortName' => '',
-			'type' => '',
-			'owner' => '',
-		],
-		
-		/**
-		 * @property $paths {stdClass}
-		 * @property $paths->assetsDir {string} — Full path of `assets` (e. g. `/var/www/someuser/data/www/somesite.com/assets/`).
-		 * @property $paths->destinationDir {string} — Resource destination full path (e. g. `/var/www/someuser/data/www/somesite.com/assets/libs/ddTools/`).
-		 * @property $paths->cacheDir {string} — Full path of `assets/cache/ddInstaller` (e. g. `/var/www/someuser/data/www/somesite.com/assets/cache/ddInstaller/`).
-		 * @property $paths->cacheFile {string} — Full path name of cache file (e. g. `/var/www/someuser/data/www/somesite.com/assets/cache/ddInstaller/EvolutionCMS.libraries.ddTools.zip`).
-		 */
-		$paths = [
-			'assetsDir' => '',
-			'destinationDir' => '',
-			'cacheDir' => '',
-			'cacheFile' => '',
-		],
-		
-		/**
-		 * @property $dbSettings {stdClass}
-		 * @property $dbSettings->tableName {string}
-		 * @property $dbSettings->contentField {string}
-		 */
-		 $dbSettings = [
-			'tableName' => null,
-			'contentField' => null,
-		]
-	;
+	/**
+	 * @property $distrData {stdClass}
+	 * @property $distrData->fullName {string} — Resource full name (e. g. `EvolutionCMS.libraries.ddTools`).
+	 * @property $distrData->shortName {string} — Resource short name (e. g. `ddTools`).
+	 * @property $distrData->type {'library'|'snippet'|'plugin'} — Resource type.
+	 * @property $distrData->owner {string} — Resource GitHub owner (e. g. `DivanDesign`).
+	 */
+	protected $distrData = [
+		'fullName' => '',
+		'shortName' => '',
+		'type' => '',
+		'owner' => '',
+	];
+	
+	/**
+	 * @property $paths {stdClass}
+	 * @property $paths->assetsDir {string} — Full path of `assets` (e. g. `/var/www/someuser/data/www/somesite.com/assets/`).
+	 * @property $paths->destinationDir {string} — Resource destination full path (e. g. `/var/www/someuser/data/www/somesite.com/assets/libs/ddTools/`).
+	 * @property $paths->cacheDir {string} — Full path of `assets/cache/ddInstaller` (e. g. `/var/www/someuser/data/www/somesite.com/assets/cache/ddInstaller/`).
+	 * @property $paths->cacheFile {string} — Full path name of cache file (e. g. `/var/www/someuser/data/www/somesite.com/assets/cache/ddInstaller/EvolutionCMS.libraries.ddTools.zip`).
+	 */
+	protected $paths = [
+		'assetsDir' => '',
+		'destinationDir' => '',
+		'cacheDir' => '',
+		'cacheFile' => '',
+	];
+	
+	/**
+	 * @property $dbSettings {stdClass}
+	 * @property $dbSettings->tableName {string}
+	 * @property $dbSettings->contentField {string}
+	 */
+	protected $dbSettings = [
+		'tableName' => null,
+		'contentField' => null,
+	];
 	
 	/**
 	 * __construct
@@ -182,14 +180,20 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * install
-	 * @version 1.0.2 (2024-09-13)
+	 * @version 1.1 (2024-12-03)
+	 * 
+	 * @param [$revision='master'] {string} — The branch name, tag name, or commit hash to retrieve.
 	 * 
 	 * @return {boolean} — Is resource installed?
 	 */
-	public function install(){
+	public function install(?string $revision = null){
 		$result = false;
 		
-		if ($this->downloadDistrZip()){
+		if (empty($revision)){
+			$revision = 'master';
+		}
+		
+		if ($this->downloadDistrZip($revision)){
 			$distrZipObject = new \ZipArchive;
 			$distrZipObject->open($this->paths->cacheFile);
 			
@@ -210,7 +214,12 @@ abstract class Installer extends \DDTools\Base\Base {
 				]);
 			}
 			
-			if ($this->isNeedToInstall($distrComposerJson)){
+			if (
+				$this->isNeedToInstall([
+					'distrComposerJson' => $distrComposerJson,
+					'distrRevision' => $revision,
+				])
+			){
 				// Just remove exist dir
 				\DDTools\FilesTools::removeDir($this->paths->destinationDir);
 				// And create again
@@ -304,11 +313,13 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * downloadDistrZip
-	 * @version 1.0.2 (2024-09-13)
+	 * @version 2.0 (2024-12-03)
+	 * 
+	 * @param $revision {string} — The branch name, tag name, or commit hash to retrieve.
 	 * 
 	 * @return {boolean}
 	 */
-	protected function downloadDistrZip(){
+	protected function downloadDistrZip($revision){
 		$result = false;
 		
 		$fileContent = \DDTools\Snippet::runSnippet([
@@ -320,6 +331,7 @@ abstract class Installer extends \DDTools\Base\Base {
 					. '/'
 					. $this->distrData->fullName
 					. '/zipball/'
+					. $revision
 				,
 				'userAgent' => \ddTools::$modx->getConfig('site_url'),
 				'headers' => [
@@ -350,22 +362,26 @@ abstract class Installer extends \DDTools\Base\Base {
 	}
 	
 	/**
-	 * isInstallNeeded
-	 * @version 1.0.2 (2024-09-13)
+	 * isNeedToInstall
+	 * @version 2.0 (2024-09-13)
 	 * 
-	 * @param $distrComposerJson {stdClass}
+	 * @param $params {stdClass|arrayAssociative} — The parameters object.
+	 * @param $params->distrComposerJson {stdClass}
+	 * @param $params->distrRevision {string}
 	 * 
 	 * @return {boolean}
 	 */
-	protected function isNeedToInstall($distrComposerJson){
+	protected function isNeedToInstall($params){
+		$params = (object) $params;
+		
 		// Don't want to install by default
 		$result = false;
 		
 		if (
 			// We don't do anything if the repository has no `composer.json`
-			is_object($distrComposerJson)
+			is_object($params->distrComposerJson)
 			// Version is required
-			&& !empty($distrComposerJson->version)
+			&& !empty($params->distrComposerJson->version)
 		){
 			$existComposerJson =
 				$this->paths->destinationDir
@@ -389,9 +405,19 @@ abstract class Installer extends \DDTools\Base\Base {
 				if (
 					// If destination version is absent
 					empty($existComposerJson->version)
+					// If it is not `master` or some version tag — install independen of composer version
+					|| (
+						$params->distrRevision != 'master'
+						&& substr(
+							$params->distrRevision,
+							0,
+							1
+						)
+						!== 'v'
+					)
 					// Or distr version > destination version
 					|| version_compare(
-						$distrComposerJson->version,
+						$params->distrComposerJson->version,
 						$existComposerJson->version,
 						'>'
 					)
