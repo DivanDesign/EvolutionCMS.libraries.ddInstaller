@@ -12,10 +12,11 @@
 class DDInstaller {
 	/**
 	 * install
-	 * @version 1.1 (2024-09-13)
+	 * @version 1.2 (2024-12-03)
 	 * 
 	 * @param $params {stdClass|arrayAssociative|stringJsonObject|stringHjsonObject|stringQueryFormatted} — @required
 	 * @param $params->url {stringUrl} — Resource GitHub URL (e. g. `https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools`). @required
+	 * @param [$params->revision='master'] {string} — The branch name, tag name, or commit hash to retrieve.
 	 * @param [$params->type] {'Snippet'|'Plugin'|'Library'} — Resource type.
 	 * 
 	 * @return {boolean}
@@ -54,7 +55,7 @@ class DDInstaller {
 			],
 		]);
 		
-		return $installerObject->install();
+		return $installerObject->install($params->revision ?? null);
 	}
 }
 ?>
