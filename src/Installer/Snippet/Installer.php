@@ -2,16 +2,15 @@
 namespace DDInstaller\Installer\Snippet;
 
 class Installer extends \DDInstaller\Installer\Installer {
-	protected
-		/**
-		 * @property $dbSettings {stdClass}
-		 * @property $dbSettings->tableName {string}
-		 * @property $dbSettings->contentField {string}
-		 */
-		$dbSettings = [
-			'tableName' => 'site_snippets',
-			'contentField' => 'snippet',
-		]
-	;
+
+	/**
+	 * @property $dbSettings {stdClass}
+	 * @property $dbSettings->tableName {string}
+	 * @property $dbSettings->contentField {string}
+	 */
+	protected $dbSettings = [
+		'tableName' => 'site_snippets',
+		'contentField' => 'snippet',
+	];
 }
 ?>

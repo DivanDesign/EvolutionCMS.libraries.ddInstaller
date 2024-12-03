@@ -4,45 +4,43 @@ namespace DDInstaller\Installer;
 abstract class Installer extends \DDTools\Base\Base {
 	use \DDTools\Base\AncestorTrait;
 	
-	protected
-		/**
-		 * @property $distrData {stdClass}
-		 * @property $distrData->fullName {string} — Resource full name (e. g. `EvolutionCMS.libraries.ddTools`).
-		 * @property $distrData->shortName {string} — Resource short name (e. g. `ddTools`).
-		 * @property $distrData->type {'library'|'snippet'|'plugin'} — Resource type.
-		 * @property $distrData->owner {string} — Resource GitHub owner (e. g. `DivanDesign`).
-		 */
-		$distrData = [
-			'fullName' => '',
-			'shortName' => '',
-			'type' => '',
-			'owner' => '',
-		],
-		
-		/**
-		 * @property $paths {stdClass}
-		 * @property $paths->assetsDir {string} — Full path of `assets` (e. g. `/var/www/someuser/data/www/somesite.com/assets/`).
-		 * @property $paths->destinationDir {string} — Resource destination full path (e. g. `/var/www/someuser/data/www/somesite.com/assets/libs/ddTools/`).
-		 * @property $paths->cacheDir {string} — Full path of `assets/cache/ddInstaller` (e. g. `/var/www/someuser/data/www/somesite.com/assets/cache/ddInstaller/`).
-		 * @property $paths->cacheFile {string} — Full path name of cache file (e. g. `/var/www/someuser/data/www/somesite.com/assets/cache/ddInstaller/EvolutionCMS.libraries.ddTools.zip`).
-		 */
-		$paths = [
-			'assetsDir' => '',
-			'destinationDir' => '',
-			'cacheDir' => '',
-			'cacheFile' => '',
-		],
-		
-		/**
-		 * @property $dbSettings {stdClass}
-		 * @property $dbSettings->tableName {string}
-		 * @property $dbSettings->contentField {string}
-		 */
-		 $dbSettings = [
-			'tableName' => null,
-			'contentField' => null,
-		]
-	;
+	/**
+	 * @property $distrData {stdClass}
+	 * @property $distrData->fullName {string} — Resource full name (e. g. `EvolutionCMS.libraries.ddTools`).
+	 * @property $distrData->shortName {string} — Resource short name (e. g. `ddTools`).
+	 * @property $distrData->type {'library'|'snippet'|'plugin'} — Resource type.
+	 * @property $distrData->owner {string} — Resource GitHub owner (e. g. `DivanDesign`).
+	 */
+	protected $distrData = [
+		'fullName' => '',
+		'shortName' => '',
+		'type' => '',
+		'owner' => '',
+	];
+	
+	/**
+	 * @property $paths {stdClass}
+	 * @property $paths->assetsDir {string} — Full path of `assets` (e. g. `/var/www/someuser/data/www/somesite.com/assets/`).
+	 * @property $paths->destinationDir {string} — Resource destination full path (e. g. `/var/www/someuser/data/www/somesite.com/assets/libs/ddTools/`).
+	 * @property $paths->cacheDir {string} — Full path of `assets/cache/ddInstaller` (e. g. `/var/www/someuser/data/www/somesite.com/assets/cache/ddInstaller/`).
+	 * @property $paths->cacheFile {string} — Full path name of cache file (e. g. `/var/www/someuser/data/www/somesite.com/assets/cache/ddInstaller/EvolutionCMS.libraries.ddTools.zip`).
+	 */
+	protected $paths = [
+		'assetsDir' => '',
+		'destinationDir' => '',
+		'cacheDir' => '',
+		'cacheFile' => '',
+	];
+	
+	/**
+	 * @property $dbSettings {stdClass}
+	 * @property $dbSettings->tableName {string}
+	 * @property $dbSettings->contentField {string}
+	 */
+	protected $dbSettings = [
+		'tableName' => null,
+		'contentField' => null,
+	];
 	
 	/**
 	 * __construct
