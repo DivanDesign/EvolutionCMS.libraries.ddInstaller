@@ -1,6 +1,11 @@
 # (MODX)EvolutionCMS.libraries.ddInstaller changelog
 
 
+## Version 0.3 (2024-12-04)
+
+* \+ `\DDInstaller::install($params)` → Parameters → `$params->revision`: The new optional parameter. Allows to specify the branch name, tag name, or commit hash to retrieve.
+
+
 ## Version 0.2 (2024-09-13)
 
 * \+ `\DDInstaller::install($params)` → Parameters → `$params->type`: The parameter has become optional. The method will detect type automatically from `$params->url` (see README).
