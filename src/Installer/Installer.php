@@ -391,7 +391,7 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * isNeedToInstall
-	 * @version 2.0 (2024-09-13)
+	 * @version 2.1 (2026-05-28)
 	 * 
 	 * @param $params {stdClass|arrayAssociative} — The parameters object.
 	 * @param $params->distrComposerJson {stdClass}
@@ -433,9 +433,17 @@ abstract class Installer extends \DDTools\Base\Base {
 				if (
 					// If destination version is absent
 					empty($existComposerJson->version)
-					// If it is not `master` or some version tag — install independen of composer version
+					// If distr version is not production — install independen of composer version
 					|| (
-						$params->distrRevision != 'master'
+						// Not `master`/`main`
+						!in_array(
+							$params->distrRevision,
+							[
+								'master',
+								'main',
+							]
+						)
+						// And not version tag
 						&& substr(
 							$params->distrRevision,
 							0,

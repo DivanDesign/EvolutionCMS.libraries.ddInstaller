@@ -77,7 +77,7 @@ Installs or updates needed snippet, plugin, or library.
 	
 * `$params->revision`
 	* Description: The branch name, tag name, or commit hash to retrieve.
-		* If you specify anything other than `'master'` or any version tag, the distributive will be installed regardless of the `composer.json` version. This is useful for installing developer versions.
+		* If you specify anything other than `'master'`/`'main'` or any version tag, the distributive will be installed regardless of the `composer.json` version. This is useful for installing developer versions.
 	* Valid values: `string`
 	* Default value: `'master'`
 	
