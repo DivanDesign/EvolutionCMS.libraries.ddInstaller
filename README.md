@@ -1,6 +1,6 @@
 # (MODX)EvolutionCMS.libraries.ddInstaller
 
-The library for installing and updating snippets, plugins, and libraries from GitHub repositories.
+The library for installing and updating snippets, plugins, and libraries from GitHub and GitLab repositories.
 
 
 ## How it works
@@ -14,7 +14,7 @@ The library for installing and updating snippets, plugins, and libraries from Gi
 
 ### Algorithm
 
-1. First, the library downloads the repository archive of Resource from GitHub using API and temporary saves it in `assets/cache/ddInstaller/`.
+1. First, the library downloads the repository archive of Resource from GitHub or GitLab using API and temporary saves it in `assets/cache/ddInstaller/`.
 2. Then it decides whether to install / update Resource or not.  
 	To do this it looks at the `composer.json` file from the archive and compares with `composer.json` of Resource on your Site:
 	* Resource will be installed or updated if:
@@ -68,8 +68,10 @@ Installs or updates needed snippet, plugin, or library.
 	* **Required**
 	
 * `$params->url`
-	* Description: Resource GitHub URL.
+	* Description: Resource GitHub or GitLab URL.
+		* Repository root URL only — without `/-/tree/...`, `/-/blob/...` and other path suffixes.
 		* E. g. `'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate'`
+		* E. g. `'https://gitlab.com/DivanDesign/SomeGroup/EvolutionCMS.snippets.ddGetDate'`
 	* Valid values: `stringUrl`
 	* **Required**
 	
@@ -106,7 +108,7 @@ Installs or updates needed snippet, plugin, or library.
 ## Examples
 
 
-### Install or update the `ddGetDate` snippet
+### GitHub: Install or update the `ddGetDate` snippet
 
 Just run the following PHP code in your sources or [Console](https://github.com/vanchelo/MODX-Evolution-Ajax-Console):
 
@@ -125,6 +127,23 @@ require_once(
 
 * If `ddGetDate` is not exist on your Site, the library will just install it.
 * If `ddGetDate` is already exist on your Site, the library will check it version and update it if needed.
+
+
+### GitLab: Install or update
+
+```php
+// Include (MODX)EvolutionCMS.libraries.ddInstaller
+require_once(
+	$modx->getConfig('base_path')
+	. 'assets/libs/ddInstaller/require.php'
+);
+
+// Install from gitlab.com
+\DDInstaller::install([
+	// This is not a valid URL, just an example
+	'url' => 'https://gitlab.com/DivanDesign/SomeGroup/EvolutionCMS.snippets.ddGetDate',
+]);
+```
 
 
 ## Links

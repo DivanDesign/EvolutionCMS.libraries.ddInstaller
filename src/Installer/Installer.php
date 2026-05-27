@@ -6,12 +6,14 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * @property $distrData {stdClass}
+	 * @property $distrData->provider {'github'|'gitlab'} — Repository host provider.
 	 * @property $distrData->fullName {string} — Resource full name (e. g. `EvolutionCMS.libraries.ddTools`).
 	 * @property $distrData->shortName {string} — Resource short name (e. g. `ddTools`).
 	 * @property $distrData->type {'library'|'snippet'|'plugin'} — Resource type.
 	 * @property $distrData->namespace {string} — Repository namespace (e. g. `DivanDesign` for GitHub).
 	 */
 	protected $distrData = [
+		'provider' => '',
 		'fullName' => '',
 		'shortName' => '',
 		'type' => '',
@@ -44,10 +46,10 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * __construct
-	 * @version 1.0.3 (2024-09-13)
+	 * @version 1.0.4 (2026-05-28)
 	 * 
 	 * @param $params {stdClass|arrayAssociative|stringJsonObject|stringHjsonObject|stringQueryFormatted} — @required
-	 * @param $params->url {stringUrl} — Resource GitHub URL (e. g. `https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools`). @required
+	 * @param $params->url {stringUrl} — Resource GitHub or GitLab URL (e. g. `https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools`). @required
 	 */
 	public function __construct($params = []){
 		// Prepare params
@@ -89,29 +91,34 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * fillDistrDataFromUrl
-	 * @version 1.0.4 (2026-05-28)
+	 * @version 1.1 (2026-05-28)
 	 * 
-	 * @desc Parses GitHub URL and fill resource data fields.
+	 * @desc Parses GitHub or GitLab repository URL and fills $this->distrData.
 	 * 
 	 * @return {void}
 	 */
 	protected final function fillDistrDataFromUrl($distrUrl){
-		$namespaceAndRepo =
-			// E. g. `['DivanDesign', 'EvolutionCMS.libraries.ddTools']`
-			array_slice(
-				// E. g. `['https:', '', 'github.com', 'DivanDesign', 'EvolutionCMS.libraries.ddTools']`
-				explode(
-					'/',
-					// E. g. 'https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools'
-					$distrUrl
-				),
-				-2,
-				2
-			)
+		$parsedUrl = parse_url($distrUrl);
+		
+		$this->distrData->provider =
+			$parsedUrl['host'] == 'gitlab.com'
+			? 'gitlab'
+			: 'github'
 		;
 		
-		$this->distrData->namespace = $namespaceAndRepo[0];
-		$this->distrData->fullName = $namespaceAndRepo[1];
+		$urlSegments = explode(
+			'/',
+			trim(
+				$parsedUrl['path'],
+				'/'
+			)
+		);
+		
+		$this->distrData->fullName = array_pop($urlSegments);
+		$this->distrData->namespace = implode(
+			'/',
+			$urlSegments
+		);
 		
 		// E. g. `['EvolutionCMS', 'libraries', 'ddTools']`
 		$this->distrData->shortName = explode(
@@ -313,7 +320,7 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * downloadDistrZip
-	 * @version 2.0.1 (2026-05-28)
+	 * @version 2.1 (2026-05-28)
 	 * 
 	 * @param $revision {string} — The branch name, tag name, or commit hash to retrieve.
 	 * 
@@ -322,22 +329,43 @@ abstract class Installer extends \DDTools\Base\Base {
 	protected function downloadDistrZip($revision){
 		$result = false;
 		
-		$fileContent = \DDTools\Snippet::runSnippet([
-			'name' => 'ddMakeHttpRequest',
-			'params' => [
-				'url' =>
-					'https://api.github.com/repos/'
-					. $this->distrData->namespace
+		$requestParams = (object) [
+			'url' => '',
+			'headers' => [],
+			'userAgent' => \ddTools::$modx->getConfig('site_url'),
+		];
+		
+		// GitLab
+		if ($this->distrData->provider == 'gitlab'){
+			$requestParams->url =
+				'https://gitlab.com/api/v4/projects/'
+				. rawurlencode(
+					$this->distrData->namespace
 					. '/'
 					. $this->distrData->fullName
-					. '/zipball/'
-					. $revision
-				,
-				'userAgent' => \ddTools::$modx->getConfig('site_url'),
-				'headers' => [
-					'Accept: application/vnd.github.v3+json',
-				],
-			],
+				)
+				. '/repository/archive.zip?sha='
+				. rawurlencode($revision)
+			;
+		// GitHub
+		}else{
+			$requestParams->url =
+				'https://api.github.com/repos/'
+				. $this->distrData->namespace
+				. '/'
+				. $this->distrData->fullName
+				. '/zipball/'
+				. $revision
+			;
+			
+			$requestParams->headers = [
+				'Accept: application/vnd.github.v3+json',
+			];
+		}
+		
+		$fileContent = \DDTools\Snippet::runSnippet([
+			'name' => 'ddMakeHttpRequest',
+			'params' => $requestParams,
 		]);
 		
 		// Clear all or we will get error

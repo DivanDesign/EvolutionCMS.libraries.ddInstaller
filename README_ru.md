@@ -1,6 +1,6 @@
 # (MODX)EvolutionCMS.libraries.ddInstaller
 
-Библиотека для установки и обновления сниппетов, плагинов и библиотек из репозиториев GitHub.
+Библиотека для установки и обновления сниппетов, плагинов и библиотек из репозиториев GitHub и GitLab.
 
 
 ## Как это работает
@@ -14,7 +14,7 @@
 
 ### Алгоритм
 
-1. Первым делом библиотека загружает архив Ресурса с репозитория GitHub при помощи API и временно сохраняет его в `assets/cache/ddInstaller/`.
+1. Первым делом библиотека загружает архив Ресурса с репозитория GitHub или GitLab при помощи API и временно сохраняет его в `assets/cache/ddInstaller/`.
 2. Затем она решает устанавливать / обновлять Ресурс или нет.  
 	Для этого она смотрит на файл `composer.json` из архива и сравнивает его с `composer.json` Ресурса на вашем Сайте:
 	* Ресурс будет установлен или обновлён если:
@@ -68,8 +68,10 @@
 	* **Обязателен**
 	
 * `$params->url`
-	* Описание: URL ресурса на GitHub.
+	* Описание: URL ресурса на GitHub или GitLab.
+		* Только корень репозитория — без `/-/tree/...`, `/-/blob/...` и прочих суффиксов пути.
 		* Например, `'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate'`
+		* Например, `'https://gitlab.com/DivanDesign/SomeGroup/EvolutionCMS.snippets.ddGetDate'`
 	* Допустимые значения: `stringUrl`
 	* **Обязателен**
 	
@@ -106,7 +108,7 @@
 ## Примеры
 
 
-### Установить или обновить сниппет `ddGetDate`
+### GitHub: Установить или обновить сниппет `ddGetDate`
 
 Просто вызовите следующий код в своих исходинках или модуле [Console](https://github.com/vanchelo/MODX-Evolution-Ajax-Console):
 
@@ -125,6 +127,23 @@ require_once(
 
 * Если `ddGetDate` отсутствует на вашем Сайте, библиотека просто установит его.
 * Если `ddGetDate` уже есть на вашем Сайте, библиотека проверит его версию и обновит, если нужно. 
+
+
+### GitLab: Установить или обновить
+
+```php
+// Подключение (MODX)EvolutionCMS.libraries.ddInstaller
+require_once(
+	$modx->getConfig('base_path')
+	. 'assets/libs/ddInstaller/require.php'
+);
+
+// Установка с gitlab.com
+\DDInstaller::install([
+	// Это не валидный URL, просто пример
+	'url' => 'https://gitlab.com/DivanDesign/SomeGroup/EvolutionCMS.snippets.ddGetDate',
+]);
+```
 
 
 ## Ссылки
