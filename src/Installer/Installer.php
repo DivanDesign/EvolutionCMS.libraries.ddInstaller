@@ -9,13 +9,13 @@ abstract class Installer extends \DDTools\Base\Base {
 	 * @property $distrData->fullName {string} — Resource full name (e. g. `EvolutionCMS.libraries.ddTools`).
 	 * @property $distrData->shortName {string} — Resource short name (e. g. `ddTools`).
 	 * @property $distrData->type {'library'|'snippet'|'plugin'} — Resource type.
-	 * @property $distrData->owner {string} — Resource GitHub owner (e. g. `DivanDesign`).
+	 * @property $distrData->namespace {string} — Repository namespace (e. g. `DivanDesign` for GitHub).
 	 */
 	protected $distrData = [
 		'fullName' => '',
 		'shortName' => '',
 		'type' => '',
-		'owner' => '',
+		'namespace' => '',
 	];
 	
 	/**
@@ -89,14 +89,14 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * fillDistrDataFromUrl
-	 * @version 1.0.3 (2024-09-13)
+	 * @version 1.0.4 (2026-05-28)
 	 * 
 	 * @desc Parses GitHub URL and fill resource data fields.
 	 * 
 	 * @return {void}
 	 */
 	protected final function fillDistrDataFromUrl($distrUrl){
-		$ownerAndRepo =
+		$namespaceAndRepo =
 			// E. g. `['DivanDesign', 'EvolutionCMS.libraries.ddTools']`
 			array_slice(
 				// E. g. `['https:', '', 'github.com', 'DivanDesign', 'EvolutionCMS.libraries.ddTools']`
@@ -110,8 +110,8 @@ abstract class Installer extends \DDTools\Base\Base {
 			)
 		;
 		
-		$this->distrData->owner = $ownerAndRepo[0];
-		$this->distrData->fullName = $ownerAndRepo[1];
+		$this->distrData->namespace = $namespaceAndRepo[0];
+		$this->distrData->fullName = $namespaceAndRepo[1];
 		
 		// E. g. `['EvolutionCMS', 'libraries', 'ddTools']`
 		$this->distrData->shortName = explode(
@@ -313,7 +313,7 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * downloadDistrZip
-	 * @version 2.0 (2024-12-03)
+	 * @version 2.0.1 (2026-05-28)
 	 * 
 	 * @param $revision {string} — The branch name, tag name, or commit hash to retrieve.
 	 * 
@@ -327,7 +327,7 @@ abstract class Installer extends \DDTools\Base\Base {
 			'params' => [
 				'url' =>
 					'https://api.github.com/repos/'
-					. $this->distrData->owner
+					. $this->distrData->namespace
 					. '/'
 					. $this->distrData->fullName
 					. '/zipball/'
