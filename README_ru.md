@@ -1,6 +1,6 @@
 # (MODX)EvolutionCMS.libraries.ddInstaller
 
-Библиотека для установки и обновления сниппетов, плагинов и библиотек из репозиториев GitHub.
+Библиотека для установки и обновления сниппетов, плагинов и библиотек из репозиториев GitHub и GitLab.
 
 
 ## Как это работает
@@ -14,7 +14,7 @@
 
 ### Алгоритм
 
-1. Первым делом библиотека загружает архив Ресурса с репозитория GitHub при помощи API и временно сохраняет его в `assets/cache/ddInstaller/`.
+1. Первым делом библиотека загружает архив Ресурса с репозитория GitHub или GitLab при помощи API и временно сохраняет его в `assets/cache/ddInstaller/`.
 2. Затем она решает устанавливать / обновлять Ресурс или нет.  
 	Для этого она смотрит на файл `composer.json` из архива и сравнивает его с `composer.json` Ресурса на вашем Сайте:
 	* Ресурс будет установлен или обновлён если:
@@ -38,8 +38,8 @@
 
 * PHP >= 7.4
 * [(MODX)EvolutionCMS](https://github.com/evolution-cms/evolution) >= 1.1
-* [(MODX)EvolutionCMS.libraries.ddTools](https://code.divandesign.ru/modx/ddtools) >= 0.62
-* [(MODX)EvolutionCMS.snippets.ddMakeHttpRequest](https://code.divandesign.ru/modx/ddmakehttprequest) >= 2.3
+* [(MODX)EvolutionCMS.libraries.ddTools](https://code.divandesign.ru/modx/ddtools) >= 0.63
+* [(MODX)EvolutionCMS.snippets.ddMakeHttpRequest](https://code.divandesign.ru/modx/ddmakehttprequest) >= 2.4
 
 
 ## Установка
@@ -68,14 +68,16 @@
 	* **Обязателен**
 	
 * `$params->url`
-	* Описание: URL ресурса на GitHub.
+	* Описание: URL ресурса на GitHub или GitLab.
+		* Только корень репозитория — без `/-/tree/...`, `/-/blob/...` и прочих суффиксов пути.
 		* Например, `'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate'`
+		* Например, `'https://gitlab.com/DivanDesign/SomeGroup/EvolutionCMS.snippets.ddGetDate'`
 	* Допустимые значения: `stringUrl`
 	* **Обязателен**
 	
 * `$params->revision`
 	* Описание: Имя ветки, тега или хэш кэммита для получения.
-		* Если задать что-то кроме `'master'` или какого-либо тега версии, дистрибутив будет установлен независимо от версии `composer.json`. Это удобно для установки девелоперских версий.
+		* Если задать что-то кроме `'master'`/`'main'` или какого-либо тега версии, дистрибутив будет установлен независимо от версии `composer.json`. Это удобно для установки девелоперских версий.
 	* Допустимые значения: `string`
 	* Значение по умолчанию: `'master'`
 	
@@ -92,6 +94,13 @@
 		* `'library'`
 		* любое пустое значение — будет автоматически определён из `$params->url`
 	* Значение по умолчанию: —
+	
+* `$params->token`
+	* Описание: Токен доступа для **приватных** репозиториев.
+		* GitHub: Personal Access Token (classic: scope `repo`, fine-grained: `Contents: Read-only`).
+		* GitLab: Personal Access Token с scope `read_api` (archive API не принимает `read_repository`, см. [gitlab#28324](https://gitlab.com/gitlab-org/gitlab/-/issues/28324)).
+	* Допустимые значения: `string`
+	* Значение по умолчанию: —
 
 
 #### Возвращает
@@ -106,7 +115,7 @@
 ## Примеры
 
 
-### Установить или обновить сниппет `ddGetDate`
+### GitHub: Установить или обновить сниппет `ddGetDate`
 
 Просто вызовите следующий код в своих исходинках или модуле [Console](https://github.com/vanchelo/MODX-Evolution-Ajax-Console):
 
@@ -125,6 +134,48 @@ require_once(
 
 * Если `ddGetDate` отсутствует на вашем Сайте, библиотека просто установит его.
 * Если `ddGetDate` уже есть на вашем Сайте, библиотека проверит его версию и обновит, если нужно. 
+
+
+### GitLab: Установить или обновить
+
+```php
+// Подключение (MODX)EvolutionCMS.libraries.ddInstaller
+require_once(
+	$modx->getConfig('base_path')
+	. 'assets/libs/ddInstaller/require.php'
+);
+
+// Установка с gitlab.com
+\DDInstaller::install([
+	// Это не валидный URL, просто пример
+	'url' => 'https://gitlab.com/DivanDesign/SomeGroup/EvolutionCMS.snippets.ddGetDate',
+]);
+```
+
+
+### Приватный репозиторий
+
+```php
+// Подключение (MODX)EvolutionCMS.libraries.ddInstaller
+require_once(
+	$modx->getConfig('base_path')
+	. 'assets/libs/ddInstaller/require.php'
+);
+
+// GitHub
+\DDInstaller::install([
+	'url' => 'https://github.com/org/EvolutionCMS.snippets.ddGetDate',
+	// Ваш GitHub Personal Access Token
+	'token' => 'ghp_xxxxxxxx',
+]);
+
+// GitLab
+\DDInstaller::install([
+	'url' => 'https://gitlab.com/group/EvolutionCMS.snippets.ddGetDate',
+	// Ваш GitLab Personal Access Token
+	'token' => 'glpat-xxxxxxxx',
+]);
+```
 
 
 ## Ссылки

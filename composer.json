@@ -1,7 +1,7 @@
 {
 	"name": "dd/evolutioncms-libraries-ddinstaller",
 	"type": "modxevo-library",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"description": "The library for install and update snippets, plugins and libraries.",
 	"keywords": [
 		"modx",
@@ -38,8 +38,8 @@
 	],
 	"require": {
 		"php": ">=7.4.0",
-		"dd/evolutioncms-libraries-ddtools": ">=0.62.0",
-		"dd/evolutioncms-snippets-ddmakehttprequest": ">=2.3.0"
+		"dd/evolutioncms-libraries-ddtools": ">=0.63.0",
+		"dd/evolutioncms-snippets-ddmakehttprequest": ">=2.4.0"
 	},
 	"autoload": {
 		"psr-4": {

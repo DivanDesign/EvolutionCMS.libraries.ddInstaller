@@ -1,6 +1,16 @@
 # (MODX)EvolutionCMS.libraries.ddInstaller changelog
 
 
+## Версия 0.4 (2026-05-28)
+
+* \+ `\DDInstaller::install` → Параметры:
+	* \+ `$params->url` → Допустимые значения: Сделана поддержка репозиториев GitLab.com наряду с GitHub.
+	* \+ `$params->token`: Новый необязательный параметр. Позволяет устанавливать ресурсы из приватных репозиториев.
+	* \+ `$params->revision`: Расширенная поддержка главных веток — `main` теперь обрабатывается как `master` для сравнения версий.
+* \* Внимание! Требуется (MODX)EvolutionCMS.libraries.ddTools >= 0.63.
+* \* Внимание! Требуется (MODX)EvolutionCMS.snippets.ddMakeHttpRequest >= 2.4.
+
+
 ## Версия 0.3 (2024-12-04)
 
 * \+ `\DDInstaller::install($params)` → Параметры → `$params->revision`: Новый необязательный параметр. Позволяет задать имя ветки, тега или хэш кэммита для получения.

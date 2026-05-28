@@ -6,16 +6,20 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * @property $distrData {stdClass}
+	 * @property $distrData->provider {'github'|'gitlab'} — Repository host provider.
 	 * @property $distrData->fullName {string} — Resource full name (e. g. `EvolutionCMS.libraries.ddTools`).
 	 * @property $distrData->shortName {string} — Resource short name (e. g. `ddTools`).
 	 * @property $distrData->type {'library'|'snippet'|'plugin'} — Resource type.
-	 * @property $distrData->owner {string} — Resource GitHub owner (e. g. `DivanDesign`).
+	 * @property $distrData->namespace {string} — Repository namespace (e. g. `DivanDesign` for GitHub).
+	 * @property $distrData->token {string} — Access token (optional).
 	 */
 	protected $distrData = [
+		'provider' => '',
 		'fullName' => '',
 		'shortName' => '',
 		'type' => '',
-		'owner' => '',
+		'namespace' => '',
+		'token' => '',
 	];
 	
 	/**
@@ -44,10 +48,11 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * __construct
-	 * @version 1.0.3 (2024-09-13)
+	 * @version 1.1 (2026-05-28)
 	 * 
 	 * @param $params {stdClass|arrayAssociative|stringJsonObject|stringHjsonObject|stringQueryFormatted} — @required
-	 * @param $params->url {stringUrl} — Resource GitHub URL (e. g. `https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools`). @required
+	 * @param $params->url {stringUrl} — Resource GitHub or GitLab URL (e. g. `https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools`). @required
+	 * @param [$params->token] {string} — Access token for private repositories on GitHub.com or GitLab.com.
 	 */
 	public function __construct($params = []){
 		// Prepare params
@@ -69,6 +74,10 @@ abstract class Installer extends \DDTools\Base\Base {
 		// Fill distr data from URL
 		$this->fillDistrDataFromUrl($params->url);
 		
+		if (!empty($params->token)){
+			$this->distrData->token = $params->token;
+		}
+		
 		// Fill distr resource type
 		$this->distrData->type =
 			// E. g. `snippet`
@@ -89,29 +98,34 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * fillDistrDataFromUrl
-	 * @version 1.0.3 (2024-09-13)
+	 * @version 1.1 (2026-05-28)
 	 * 
-	 * @desc Parses GitHub URL and fill resource data fields.
+	 * @desc Parses GitHub or GitLab repository URL and fills $this->distrData.
 	 * 
 	 * @return {void}
 	 */
 	protected final function fillDistrDataFromUrl($distrUrl){
-		$ownerAndRepo =
-			// E. g. `['DivanDesign', 'EvolutionCMS.libraries.ddTools']`
-			array_slice(
-				// E. g. `['https:', '', 'github.com', 'DivanDesign', 'EvolutionCMS.libraries.ddTools']`
-				explode(
-					'/',
-					// E. g. 'https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools'
-					$distrUrl
-				),
-				-2,
-				2
-			)
+		$parsedUrl = parse_url($distrUrl);
+		
+		$this->distrData->provider =
+			$parsedUrl['host'] == 'gitlab.com'
+			? 'gitlab'
+			: 'github'
 		;
 		
-		$this->distrData->owner = $ownerAndRepo[0];
-		$this->distrData->fullName = $ownerAndRepo[1];
+		$urlSegments = explode(
+			'/',
+			trim(
+				$parsedUrl['path'],
+				'/'
+			)
+		);
+		
+		$this->distrData->fullName = array_pop($urlSegments);
+		$this->distrData->namespace = implode(
+			'/',
+			$urlSegments
+		);
 		
 		// E. g. `['EvolutionCMS', 'libraries', 'ddTools']`
 		$this->distrData->shortName = explode(
@@ -313,7 +327,7 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * downloadDistrZip
-	 * @version 2.0 (2024-12-03)
+	 * @version 2.2.1 (2026-05-28)
 	 * 
 	 * @param $revision {string} — The branch name, tag name, or commit hash to retrieve.
 	 * 
@@ -322,22 +336,53 @@ abstract class Installer extends \DDTools\Base\Base {
 	protected function downloadDistrZip($revision){
 		$result = false;
 		
-		$fileContent = \DDTools\Snippet::runSnippet([
-			'name' => 'ddMakeHttpRequest',
-			'params' => [
-				'url' =>
-					'https://api.github.com/repos/'
-					. $this->distrData->owner
+		$requestParams = (object) [
+			'requester' => (object) [
+				'url' => '',
+				'headers' => [],
+				'userAgent' => \ddTools::$modx->getConfig('site_url'),
+			],
+		];
+		
+		// GitLab
+		if ($this->distrData->provider == 'gitlab'){
+			$requestParams->requester->url =
+				'https://gitlab.com/api/v4/projects/'
+				. rawurlencode(
+					$this->distrData->namespace
 					. '/'
 					. $this->distrData->fullName
-					. '/zipball/'
-					. $revision
-				,
-				'userAgent' => \ddTools::$modx->getConfig('site_url'),
-				'headers' => [
-					'Accept: application/vnd.github.v3+json',
-				],
-			],
+				)
+				. '/repository/archive.zip?sha='
+				. rawurlencode($revision)
+			;
+			
+			if (!empty($this->distrData->token)){
+				$requestParams->requester->headers[] = 'PRIVATE-TOKEN: ' . $this->distrData->token;
+			}
+		// GitHub
+		}else{
+			$requestParams->requester->url =
+				'https://api.github.com/repos/'
+				. $this->distrData->namespace
+				. '/'
+				. $this->distrData->fullName
+				. '/zipball/'
+				. $revision
+			;
+			
+			$requestParams->requester->headers = [
+				'Accept: application/vnd.github.v3+json',
+			];
+			
+			if (!empty($this->distrData->token)){
+				$requestParams->requester->headers[] = 'Authorization: Bearer ' . $this->distrData->token;
+			}
+		}
+		
+		$fileContent = \DDTools\Snippet::runSnippet([
+			'name' => 'ddMakeHttpRequest',
+			'params' => $requestParams,
 		]);
 		
 		// Clear all or we will get error
@@ -363,7 +408,7 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * isNeedToInstall
-	 * @version 2.0 (2024-09-13)
+	 * @version 2.1 (2026-05-28)
 	 * 
 	 * @param $params {stdClass|arrayAssociative} — The parameters object.
 	 * @param $params->distrComposerJson {stdClass}
@@ -405,9 +450,17 @@ abstract class Installer extends \DDTools\Base\Base {
 				if (
 					// If destination version is absent
 					empty($existComposerJson->version)
-					// If it is not `master` or some version tag — install independen of composer version
+					// If distr version is not production — install independen of composer version
 					|| (
-						$params->distrRevision != 'master'
+						// Not `master`/`main`
+						!in_array(
+							$params->distrRevision,
+							[
+								'master',
+								'main',
+							]
+						)
+						// And not version tag
 						&& substr(
 							$params->distrRevision,
 							0,

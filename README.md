@@ -1,6 +1,6 @@
 # (MODX)EvolutionCMS.libraries.ddInstaller
 
-The library for installing and updating snippets, plugins, and libraries from GitHub repositories.
+The library for installing and updating snippets, plugins, and libraries from GitHub and GitLab repositories.
 
 
 ## How it works
@@ -14,7 +14,7 @@ The library for installing and updating snippets, plugins, and libraries from Gi
 
 ### Algorithm
 
-1. First, the library downloads the repository archive of Resource from GitHub using API and temporary saves it in `assets/cache/ddInstaller/`.
+1. First, the library downloads the repository archive of Resource from GitHub or GitLab using API and temporary saves it in `assets/cache/ddInstaller/`.
 2. Then it decides whether to install / update Resource or not.  
 	To do this it looks at the `composer.json` file from the archive and compares with `composer.json` of Resource on your Site:
 	* Resource will be installed or updated if:
@@ -38,8 +38,8 @@ The library for installing and updating snippets, plugins, and libraries from Gi
 
 * PHP >= 7.4
 * [(MODX)EvolutionCMS](https://github.com/evolution-cms/evolution) >= 1.1
-* [(MODX)EvolutionCMS.libraries.ddTools](https://code.divandesign.ru/modx/ddtools) >= 0.62
-* [(MODX)EvolutionCMS.snippets.ddMakeHttpRequest](https://code.divandesign.ru/modx/ddmakehttprequest) >= 2.3
+* [(MODX)EvolutionCMS.libraries.ddTools](https://code.divandesign.ru/modx/ddtools) >= 0.63
+* [(MODX)EvolutionCMS.snippets.ddMakeHttpRequest](https://code.divandesign.ru/modx/ddmakehttprequest) >= 2.4
 
 
 ## Installation
@@ -68,14 +68,16 @@ Installs or updates needed snippet, plugin, or library.
 	* **Required**
 	
 * `$params->url`
-	* Description: Resource GitHub URL.
+	* Description: Resource GitHub or GitLab URL.
+		* Repository root URL only — without `/-/tree/...`, `/-/blob/...` and other path suffixes.
 		* E. g. `'https://github.com/DivanDesign/EvolutionCMS.snippets.ddGetDate'`
+		* E. g. `'https://gitlab.com/DivanDesign/SomeGroup/EvolutionCMS.snippets.ddGetDate'`
 	* Valid values: `stringUrl`
 	* **Required**
 	
 * `$params->revision`
 	* Description: The branch name, tag name, or commit hash to retrieve.
-		* If you specify anything other than `'master'` or any version tag, the distributive will be installed regardless of the `composer.json` version. This is useful for installing developer versions.
+		* If you specify anything other than `'master'`/`'main'` or any version tag, the distributive will be installed regardless of the `composer.json` version. This is useful for installing developer versions.
 	* Valid values: `string`
 	* Default value: `'master'`
 	
@@ -92,6 +94,13 @@ Installs or updates needed snippet, plugin, or library.
 		* `'library'`
 		* any empty value — will be auto detected from `$params->url`
 	* Default value: —
+	
+* `$params->token`
+	* Description: Access token for **private** repositories.
+		* GitHub: Personal Access Token (classic: `repo` scope, fine-grained: `Contents: Read-only`).
+		* GitLab: Personal Access Token with `read_api` scope (archive API does not accept `read_repository`, see [gitlab#28324](https://gitlab.com/gitlab-org/gitlab/-/issues/28324)).
+	* Valid values: `string`
+	* Default value: —
 
 
 #### Returns
@@ -106,7 +115,7 @@ Installs or updates needed snippet, plugin, or library.
 ## Examples
 
 
-### Install or update the `ddGetDate` snippet
+### GitHub: Install or update the `ddGetDate` snippet
 
 Just run the following PHP code in your sources or [Console](https://github.com/vanchelo/MODX-Evolution-Ajax-Console):
 
@@ -125,6 +134,48 @@ require_once(
 
 * If `ddGetDate` is not exist on your Site, the library will just install it.
 * If `ddGetDate` is already exist on your Site, the library will check it version and update it if needed.
+
+
+### GitLab: Install or update
+
+```php
+// Include (MODX)EvolutionCMS.libraries.ddInstaller
+require_once(
+	$modx->getConfig('base_path')
+	. 'assets/libs/ddInstaller/require.php'
+);
+
+// Install from gitlab.com
+\DDInstaller::install([
+	// This is not a valid URL, just an example
+	'url' => 'https://gitlab.com/DivanDesign/SomeGroup/EvolutionCMS.snippets.ddGetDate',
+]);
+```
+
+
+### Private repository
+
+```php
+// Include (MODX)EvolutionCMS.libraries.ddInstaller
+require_once(
+	$modx->getConfig('base_path')
+	. 'assets/libs/ddInstaller/require.php'
+);
+
+// GitHub
+\DDInstaller::install([
+	'url' => 'https://github.com/org/EvolutionCMS.snippets.ddGetDate',
+	// Your GitHub Personal Access Token
+	'token' => 'ghp_xxxxxxxx',
+]);
+
+// GitLab
+\DDInstaller::install([
+	'url' => 'https://gitlab.com/group/EvolutionCMS.snippets.ddGetDate',
+	// Your GitLab Personal Access Token
+	'token' => 'glpat-xxxxxxxx',
+]);
+```
 
 
 ## Links
