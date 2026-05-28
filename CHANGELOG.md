@@ -1,6 +1,16 @@
 # (MODX)EvolutionCMS.libraries.ddInstaller changelog
 
 
+## Version 0.4 (2026-05-28)
+
+* \+ `\DDInstaller::install` → Parameters:
+	* \+ `$params->url` → Valid values: Created support for GitLab.com repositories alongside GitHub.
+	* \+ `$params->token`: The new optional parameter. Enables installation from private repositories.
+	* \+ `$params->revision`: Extended stable branch support — `main` is now treated like `master` for version comparison.
+* \* Attention! (MODX)EvolutionCMS.libraries.ddTools >= 0.63 is required.
+* \* Attention! (MODX)EvolutionCMS.snippets.ddMakeHttpRequest >= 2.4 is required.
+
+
 ## Version 0.3 (2024-12-04)
 
 * \+ `\DDInstaller::install($params)` → Parameters → `$params->revision`: The new optional parameter. Allows to specify the branch name, tag name, or commit hash to retrieve.
