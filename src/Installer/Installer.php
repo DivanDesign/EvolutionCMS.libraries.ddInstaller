@@ -11,6 +11,7 @@ abstract class Installer extends \DDTools\Base\Base {
 	 * @property $distrData->shortName {string} — Resource short name (e. g. `ddTools`).
 	 * @property $distrData->type {'library'|'snippet'|'plugin'} — Resource type.
 	 * @property $distrData->namespace {string} — Repository namespace (e. g. `DivanDesign` for GitHub).
+	 * @property $distrData->token {string} — Access token (optional).
 	 */
 	protected $distrData = [
 		'provider' => '',
@@ -18,6 +19,7 @@ abstract class Installer extends \DDTools\Base\Base {
 		'shortName' => '',
 		'type' => '',
 		'namespace' => '',
+		'token' => '',
 	];
 	
 	/**
@@ -46,10 +48,11 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * __construct
-	 * @version 1.0.4 (2026-05-28)
+	 * @version 1.1 (2026-05-28)
 	 * 
 	 * @param $params {stdClass|arrayAssociative|stringJsonObject|stringHjsonObject|stringQueryFormatted} — @required
 	 * @param $params->url {stringUrl} — Resource GitHub or GitLab URL (e. g. `https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools`). @required
+	 * @param [$params->token] {string} — Access token for private repositories on GitHub.com or GitLab.com.
 	 */
 	public function __construct($params = []){
 		// Prepare params
@@ -70,6 +73,10 @@ abstract class Installer extends \DDTools\Base\Base {
 		
 		// Fill distr data from URL
 		$this->fillDistrDataFromUrl($params->url);
+		
+		if (!empty($params->token)){
+			$this->distrData->token = $params->token;
+		}
 		
 		// Fill distr resource type
 		$this->distrData->type =
@@ -320,7 +327,7 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * downloadDistrZip
-	 * @version 2.1 (2026-05-28)
+	 * @version 2.2 (2026-05-28)
 	 * 
 	 * @param $revision {string} — The branch name, tag name, or commit hash to retrieve.
 	 * 
@@ -347,6 +354,10 @@ abstract class Installer extends \DDTools\Base\Base {
 				. '/repository/archive.zip?sha='
 				. rawurlencode($revision)
 			;
+			
+			if (!empty($this->distrData->token)){
+				$requestParams->headers[] = 'PRIVATE-TOKEN: ' . $this->distrData->token;
+			}
 		// GitHub
 		}else{
 			$requestParams->url =
@@ -361,6 +372,10 @@ abstract class Installer extends \DDTools\Base\Base {
 			$requestParams->headers = [
 				'Accept: application/vnd.github.v3+json',
 			];
+			
+			if (!empty($this->distrData->token)){
+				$requestParams->headers[] = 'Authorization: Bearer ' . $this->distrData->token;
+			}
 		}
 		
 		$fileContent = \DDTools\Snippet::runSnippet([

@@ -94,6 +94,13 @@ Installs or updates needed snippet, plugin, or library.
 		* `'library'`
 		* any empty value — will be auto detected from `$params->url`
 	* Default value: —
+	
+* `$params->token`
+	* Description: Access token for **private** repositories.
+		* GitHub: Personal Access Token (classic: `repo` scope, fine-grained: `Contents: Read-only`).
+		* GitLab: Personal Access Token with `read_api` scope (archive API does not accept `read_repository`, see [gitlab#28324](https://gitlab.com/gitlab-org/gitlab/-/issues/28324)).
+	* Valid values: `string`
+	* Default value: —
 
 
 #### Returns
@@ -142,6 +149,31 @@ require_once(
 \DDInstaller::install([
 	// This is not a valid URL, just an example
 	'url' => 'https://gitlab.com/DivanDesign/SomeGroup/EvolutionCMS.snippets.ddGetDate',
+]);
+```
+
+
+### Private repository
+
+```php
+// Include (MODX)EvolutionCMS.libraries.ddInstaller
+require_once(
+	$modx->getConfig('base_path')
+	. 'assets/libs/ddInstaller/require.php'
+);
+
+// GitHub
+\DDInstaller::install([
+	'url' => 'https://github.com/org/EvolutionCMS.snippets.ddGetDate',
+	// Your GitHub Personal Access Token
+	'token' => 'ghp_xxxxxxxx',
+]);
+
+// GitLab
+\DDInstaller::install([
+	'url' => 'https://gitlab.com/group/EvolutionCMS.snippets.ddGetDate',
+	// Your GitLab Personal Access Token
+	'token' => 'glpat-xxxxxxxx',
 ]);
 ```
 

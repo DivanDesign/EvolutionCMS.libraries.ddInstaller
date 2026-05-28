@@ -12,12 +12,13 @@
 class DDInstaller {
 	/**
 	 * install
-	 * @version 1.2 (2024-12-03)
+	 * @version 1.3 (2026-05-28)
 	 * 
 	 * @param $params {stdClass|arrayAssociative|stringJsonObject|stringHjsonObject|stringQueryFormatted} — @required
 	 * @param $params->url {stringUrl} — Resource GitHub URL (e. g. `https://github.com/DivanDesign/EvolutionCMS.libraries.ddTools`). @required
 	 * @param [$params->revision='master'] {string} — The branch name, tag name, or commit hash to retrieve.
 	 * @param [$params->type] {'Snippet'|'Plugin'|'Library'} — Resource type.
+	 * @param [$params->token] {string} — Access token for private repositories on GitHub.com or GitLab.com.
 	 * 
 	 * @return {boolean}
 	 */
@@ -52,6 +53,7 @@ class DDInstaller {
 			// Passing parameters into constructor
 			'params' => [
 				'url' => $params->url,
+				'token' => $params->token ?? null,
 			],
 		]);
 		

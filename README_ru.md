@@ -94,6 +94,13 @@
 		* `'library'`
 		* любое пустое значение — будет автоматически определён из `$params->url`
 	* Значение по умолчанию: —
+	
+* `$params->token`
+	* Описание: Токен доступа для **приватных** репозиториев.
+		* GitHub: Personal Access Token (classic: scope `repo`, fine-grained: `Contents: Read-only`).
+		* GitLab: Personal Access Token с scope `read_api` (archive API не принимает `read_repository`, см. [gitlab#28324](https://gitlab.com/gitlab-org/gitlab/-/issues/28324)).
+	* Допустимые значения: `string`
+	* Значение по умолчанию: —
 
 
 #### Возвращает
@@ -142,6 +149,31 @@ require_once(
 \DDInstaller::install([
 	// Это не валидный URL, просто пример
 	'url' => 'https://gitlab.com/DivanDesign/SomeGroup/EvolutionCMS.snippets.ddGetDate',
+]);
+```
+
+
+### Приватный репозиторий
+
+```php
+// Подключение (MODX)EvolutionCMS.libraries.ddInstaller
+require_once(
+	$modx->getConfig('base_path')
+	. 'assets/libs/ddInstaller/require.php'
+);
+
+// GitHub
+\DDInstaller::install([
+	'url' => 'https://github.com/org/EvolutionCMS.snippets.ddGetDate',
+	// Ваш GitHub Personal Access Token
+	'token' => 'ghp_xxxxxxxx',
+]);
+
+// GitLab
+\DDInstaller::install([
+	'url' => 'https://gitlab.com/group/EvolutionCMS.snippets.ddGetDate',
+	// Ваш GitLab Personal Access Token
+	'token' => 'glpat-xxxxxxxx',
 ]);
 ```
 
