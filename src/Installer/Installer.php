@@ -327,7 +327,7 @@ abstract class Installer extends \DDTools\Base\Base {
 	
 	/**
 	 * downloadDistrZip
-	 * @version 2.2 (2026-05-28)
+	 * @version 2.2.1 (2026-05-28)
 	 * 
 	 * @param $revision {string} — The branch name, tag name, or commit hash to retrieve.
 	 * 
@@ -337,14 +337,16 @@ abstract class Installer extends \DDTools\Base\Base {
 		$result = false;
 		
 		$requestParams = (object) [
-			'url' => '',
-			'headers' => [],
-			'userAgent' => \ddTools::$modx->getConfig('site_url'),
+			'requester' => (object) [
+				'url' => '',
+				'headers' => [],
+				'userAgent' => \ddTools::$modx->getConfig('site_url'),
+			],
 		];
 		
 		// GitLab
 		if ($this->distrData->provider == 'gitlab'){
-			$requestParams->url =
+			$requestParams->requester->url =
 				'https://gitlab.com/api/v4/projects/'
 				. rawurlencode(
 					$this->distrData->namespace
@@ -356,11 +358,11 @@ abstract class Installer extends \DDTools\Base\Base {
 			;
 			
 			if (!empty($this->distrData->token)){
-				$requestParams->headers[] = 'PRIVATE-TOKEN: ' . $this->distrData->token;
+				$requestParams->requester->headers[] = 'PRIVATE-TOKEN: ' . $this->distrData->token;
 			}
 		// GitHub
 		}else{
-			$requestParams->url =
+			$requestParams->requester->url =
 				'https://api.github.com/repos/'
 				. $this->distrData->namespace
 				. '/'
@@ -369,12 +371,12 @@ abstract class Installer extends \DDTools\Base\Base {
 				. $revision
 			;
 			
-			$requestParams->headers = [
+			$requestParams->requester->headers = [
 				'Accept: application/vnd.github.v3+json',
 			];
 			
 			if (!empty($this->distrData->token)){
-				$requestParams->headers[] = 'Authorization: Bearer ' . $this->distrData->token;
+				$requestParams->requester->headers[] = 'Authorization: Bearer ' . $this->distrData->token;
 			}
 		}
 		
